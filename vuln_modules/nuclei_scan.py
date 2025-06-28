@@ -1,20 +1,42 @@
 """Run nuclei vulnerability scanner."""
 
+import argparse
 import os
 import subprocess
 import sys
+from typing import List
 
 from analysis_db.chat_analyzer import analyze_result
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: nuclei_scan.py <url>")
-        return False
-    url = sys.argv[1]
-    script = os.path.join(os.path.dirname(__file__), "..", "github_scanners", "nuclei", "run.sh")
-    proc = subprocess.run(["bash", script, "-u", url], capture_output=True, text=True)
-    result = {"target": url, "output": proc.stdout.strip()}
+def build_nuclei_cmd(
+    url: str,
+    templates: str | None = None,
+    severity: str | None = None,
+) -> List[str]:
+    """Construct the command list for nuclei."""
+    script = os.path.join(
+        os.path.dirname(__file__), "..", "github_scanners", "nuclei", "run.sh"
+    )
+    cmd = ["bash", script, "-u", url]
+    if templates:
+        cmd += ["-t", templates]
+    if severity:
+        cmd += ["-severity", severity]
+    return cmd
+
+
+def main(argv: List[str] | None = None):
+    argv = argv or sys.argv[1:]
+    parser = argparse.ArgumentParser(description="Run nuclei")
+    parser.add_argument("url")
+    parser.add_argument("-t", "--templates", help="Templates directory")
+    parser.add_argument("-s", "--severity", help="Filter by severity")
+    args = parser.parse_args(argv)
+
+    cmd = build_nuclei_cmd(args.url, templates=args.templates, severity=args.severity)
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    result = {"target": args.url, "output": proc.stdout.strip()}
     result.update(analyze_result(result))
     return result
 

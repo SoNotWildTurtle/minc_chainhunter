@@ -16,10 +16,14 @@ Example modules include:
 - `sqli_scanner` – placeholder that always reports no vulnerabilities.
 - `subfinder_scan` – enumerate subdomains using subfinder.
 - `hakrawler_scan` – crawl a target site for links.
-- `dirsearch_scan` – brute-force directories on a web server.
-- `nuclei_scan` – run nuclei against a target.
-- `ssrfmap_scan` – test for SSRF issues.
-- `gitleaks_scan` – scan a repository for secrets.
+- `dirsearch_scan` – brute-force directories on a web server. Supports `--wordlist`,
+  `--threads`, and `--extensions` to customize scans.
+- `nuclei_scan` – run nuclei against a target. Accepts `--templates` and
+  `--severity` filters.
+- `ssrfmap_scan` – test for SSRF issues with adjustable parameter name via
+  `--param` and optional POST data.
+- `gitleaks_scan` – scan a repository for secrets with `--redact` and custom
+  configuration via `--config`.
 
 The IPC bus components are under development. `bus_integrity.py` includes helper functions to verify socket permissions and approved command aliases.
 

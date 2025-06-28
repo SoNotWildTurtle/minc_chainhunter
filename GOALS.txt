@@ -8,3 +8,4 @@
 - implement progressive compression for dev notes
 - add slider-based viewer that recompresses distant entries
 - extend dev notes format with metadata and tag searching
+- support context-aware viewing where referenced notes are decompressed

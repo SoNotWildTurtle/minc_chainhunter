@@ -6,6 +6,7 @@ import base64
 import json
 import os
 import zlib
+import lzma
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
@@ -16,8 +17,17 @@ NOTES_PATH = os.environ.get(
 
 
 def _decode_line(line: str) -> Tuple[int, Dict]:
-    level, b64 = line.split(':', 1)
-    data = zlib.decompress(base64.b64decode(b64))
+    parts = line.split(':', 2)
+    if len(parts) == 3:
+        level_str, alg, b64 = parts
+    else:
+        level_str, b64 = parts
+        alg = 'zlib'
+    raw = base64.b64decode(b64)
+    if alg == 'lzma':
+        data = lzma.decompress(raw)
+    else:
+        data = zlib.decompress(raw)
     try:
         meta = json.loads(data.decode("utf-8"))
     except json.JSONDecodeError:
@@ -29,13 +39,19 @@ def _decode_line(line: str) -> Tuple[int, Dict]:
             "personal": False,
             "text": data.decode("utf-8"),
         }
-    return int(level), meta
+    meta.setdefault('alg', alg)
+    return int(level_str), meta
 
 
 def _encode_line(level: int, meta: Dict) -> str:
+    alg = 'lzma' if level >= 8 else 'zlib'
+    meta['alg'] = alg
     raw = json.dumps(meta).encode("utf-8")
-    data = zlib.compress(raw, level)
-    return f"{level}:{base64.b64encode(data).decode('utf-8')}"
+    if alg == 'lzma':
+        data = lzma.compress(raw)
+    else:
+        data = zlib.compress(raw, level)
+    return f"{level}:{alg}:{base64.b64encode(data).decode('utf-8')}"
 
 
 def load_notes() -> List[Tuple[int, Dict]]:
@@ -59,7 +75,12 @@ def save_notes(notes: List[Tuple[int, Dict]]) -> None:
             f.write(_encode_line(level, meta) + '\n')
 
 
-def add_note(text: str, tags: Optional[List[str]] = None, personal: bool = False) -> None:
+def add_note(
+    text: str,
+    tags: Optional[List[str]] = None,
+    personal: bool = False,
+    context: Optional[List[int]] = None,
+) -> None:
     """Add a note and recompress older ones."""
     notes = load_notes()
     updated: List[Tuple[int, Dict]] = []
@@ -72,6 +93,7 @@ def add_note(text: str, tags: Optional[List[str]] = None, personal: bool = False
         "ts": timestamp,
         "tags": tags or [],
         "personal": personal,
+        "context": context or [],
         "text": text,
     }
     updated.append((1, meta))
@@ -85,21 +107,32 @@ def show_notes(n: int = 0, tag: Optional[str] = None) -> None:
     if n > 0:
         notes = notes[-n:]
     for _, meta in notes:
-        print(f"{meta['ts']} - {meta['text']}")
+        ctx = f" ctx:{','.join(map(str, meta.get('context', [])))}" if meta.get('context') else ''
+        print(f"{meta['ts']} - {meta['text']}{ctx}")
 
 
 def view_notes(center: int, radius: int = 0) -> None:
-    """View notes around a specific index and adjust compression levels."""
+    """View notes around a specific index and adjust compression levels.
+
+    Notes referenced by the selected entry via the ``context`` field are
+    also decompressed to level 1.
+    """
     notes = load_notes()
     if not notes:
         return
     total = len(notes)
     center = max(0, min(total - 1, center))
+    id_map = {meta["id"]: i for i, (_, meta) in enumerate(notes)}
     updated: List[Tuple[int, Dict]] = []
     for idx, (_, meta) in enumerate(notes):
         dist = abs(idx - center)
         level = min(9, 1 + dist)
         updated.append((level, meta))
+    # decompress context notes
+    ctx_ids = notes[center][1].get("context", [])
+    for cid in ctx_ids:
+        if cid in id_map:
+            updated[id_map[cid]] = (1, updated[id_map[cid]][1])
     save_notes(updated)
     start = max(0, center - radius)
     end = min(total, center + radius + 1)
@@ -117,6 +150,8 @@ def main() -> None:
     parser.add_argument('--add', metavar='TEXT', help='Add a note')
     parser.add_argument('--tags', nargs='*', default=[], help='Tags for --add')
     parser.add_argument('--personal', action='store_true', help='Mark new note as personal')
+    parser.add_argument('--context', nargs='*', type=int, default=[], metavar='ID',
+                        help='IDs of related notes for --add')
     parser.add_argument('--show', type=int, nargs='?', const=5, metavar='N', help='Show last N notes')
     parser.add_argument('--tag', metavar='TAG', help='Filter notes by TAG when using --show')
     parser.add_argument('--view', type=int, metavar='INDEX', help='View notes around INDEX and recompress others')
@@ -124,7 +159,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.add:
-        add_note(args.add, tags=args.tags, personal=args.personal)
+        add_note(args.add, tags=args.tags, personal=args.personal, context=args.context)
     elif args.show is not None:
         show_notes(args.show, tag=args.tag)
     elif args.view is not None:

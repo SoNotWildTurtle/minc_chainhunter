@@ -16,6 +16,7 @@ Features:
 
 import os
 import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import importlib
 import glob
 import argparse
@@ -93,7 +94,11 @@ def setup_argparse() -> argparse.ArgumentParser:
         action='store_true',
         help='Force update even if already up to date'
     )
-    
+
+    # Report command
+    report_parser = subparsers.add_parser('report', help='Generate markdown report')
+    report_parser.add_argument('--out_dir', default='reports', help='Output directory')
+
     return parser
 
 def discover_modules() -> Dict[str, str]:
@@ -174,10 +179,21 @@ def run_module(name: str, args: List[str]) -> bool:
         
         logger.info(f"Running module: {name}")
         result = mod.main()
-        
+
         # Restore original args
         sys.argv = original_argv
-        
+
+        # If module returns structured result, log to DB
+        if isinstance(result, dict):
+            try:
+                from analysis_db.db_api import log_scan_result
+                sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+                payload = {"module": name, **result}
+                log_scan_result(sock, payload)
+            except Exception as e:
+                logger.error(f"Failed to log result: {e}")
+            return True
+
         return result is not False
     except Exception as e:
         logger.error(f"Error running module {name}: {str(e)}")
@@ -375,6 +391,16 @@ def main() -> int:
         elif args.command == 'update':
             success = update_minc(args.force)
             return 0 if success else 1
+
+        elif args.command == 'report':
+            from analysis_db.db_api import generate_report
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = generate_report(sock, args.out_dir)
+            if resp.get("status") == "ok":
+                print(f"[+] Report written to {resp.get('path')}")
+                return 0
+            print("[!] Failed to generate report")
+            return 1
             
     except KeyboardInterrupt:
         print("\n[!] Operation cancelled by user.")

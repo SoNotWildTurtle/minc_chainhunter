@@ -1,0 +1,9 @@
+- integrate CLI with IPC database server
+- add command to generate reports from stored results
+- create additional recon/vuln modules
+- enhance sandboxing and security
+- implement self-update mechanism
+
+- add manager scripts for each directory
+- implement progressive compression for dev notes
+- add slider-based viewer that recompresses distant entries

@@ -24,6 +24,8 @@ Example modules include:
   `--param` and optional POST data.
 - `gitleaks_scan` – scan a repository for secrets with `--redact` and custom
   configuration via `--config`.
+- `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
+  with results saved through the CLI.
 
 The IPC bus components are under development. `bus_integrity.py` includes helper functions to verify socket permissions and approved command aliases.
 
@@ -76,6 +78,18 @@ python3 vuln_modules/manager.py run nuclei_scan https://example.com
 ```
 
 These helpers make it easy to automate tasks with minimal commands.
+
+## Bug hunting pipeline
+
+The `bug_hunt` pipeline module demonstrates automated scanning. It runs
+`ping_sweep` followed by `sqli_scanner` and stores the aggregated result in the
+analysis database:
+
+```bash
+python3 cli/main.py run bug_hunt 127.0.0.1
+```
+
+Use the normal `results` and `report` commands to view pipeline output.
 
 ## Developer notes
 

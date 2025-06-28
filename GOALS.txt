@@ -12,3 +12,4 @@
 - support context-aware viewing where referenced notes are decompressed
 - expose stored scan results via IPC for quick retrieval
 - refine vulnerability modules with advanced options for bundled GitHub scanners
+- implement pipeline module for automated bug hunting

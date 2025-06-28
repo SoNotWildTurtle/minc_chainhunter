@@ -37,7 +37,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-MODULE_DIRS = ["../recon_modules", "../vuln_modules"]
+MODULE_DIRS = ["../recon_modules", "../vuln_modules", "../pipelines"]
 MODULES: Dict[str, str] = {}
 VERSION = "1.0.0"
 
@@ -350,6 +350,8 @@ def main() -> int:
             if not args.module:
                 logger.error("No module specified")
                 return 1
+            global MODULES
+            MODULES = discover_modules()
             success = run_module(args.module, args.args)
             return 0 if success else 1
             

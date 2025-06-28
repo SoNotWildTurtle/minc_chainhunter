@@ -1,7 +1,7 @@
 import argparse
 import json
 import os
-from typing import Dict
+from typing import Dict, List
 
 from .chat_analyzer import analyze_result
 from .report_gen import build_report, load_results
@@ -28,6 +28,13 @@ def handle_scan(result: Dict) -> Dict:
     return {"status": "ok"}
 
 
+def handle_get_results(limit: int = 0) -> Dict:
+    data = load_results(DB_DIR)
+    if limit > 0:
+        data = data[-limit:]
+    return {"status": "ok", "results": data}
+
+
 def start_db_server(db_dir: str, sock_path: str, once: bool = False) -> None:
     global DB_DIR
     DB_DIR = db_dir
@@ -44,6 +51,9 @@ def start_db_server(db_dir: str, sock_path: str, once: bool = False) -> None:
             out_dir = msg.get("out_dir", "reports")
             path = build_report(results, out_dir)
             return {"status": "ok", "path": path}
+        if alias == "results":
+            limit = int(msg.get("limit", 0))
+            return handle_get_results(limit)
         return {"status": "error", "error": "unknown alias"}
 
     start_ipc_server(sock_path, handler, once)

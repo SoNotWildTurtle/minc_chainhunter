@@ -21,3 +21,13 @@ def generate_report(sock_path: str, out_dir: str = "reports") -> Dict:
         raise ValueError("Alias not approved")
     payload = {"alias": alias, "out_dir": out_dir}
     return send_request(sock_path, payload)
+
+
+def get_results(sock_path: str, limit: int = 0) -> Dict:
+    """Retrieve stored scan results from the DB."""
+    alias = "results"
+    if not is_alias_approved(alias):
+        raise ValueError("Alias not approved")
+    payload = {"alias": alias, "limit": limit}
+    return send_request(sock_path, payload)
+

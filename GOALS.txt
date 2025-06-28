@@ -7,5 +7,7 @@
 - add manager scripts for each directory
 - implement progressive compression for dev notes
 - add slider-based viewer that recompresses distant entries
+- use algorithmic compression (RLE+zlib) instead of switching algorithms
 - extend dev notes format with metadata and tag searching
 - support context-aware viewing where referenced notes are decompressed
+- expose stored scan results via IPC for quick retrieval

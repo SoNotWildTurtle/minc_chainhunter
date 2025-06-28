@@ -55,7 +55,8 @@ summary. Reports are stored in `db_data/results.json`.
 
 To generate a consolidated markdown report of all stored results, either run the
 CLI command `python3 cli/main.py report` or send the `report` alias over the IPC
-bus. Reports are written to the `reports/` directory by default.
+bus. Reports are written to the `reports/` directory by default. Use
+`python3 cli/main.py results` to quickly display stored entries.
 
 You can launch the analysis database server with `scripts/setup_ipc_bus.sh`,
 which starts the IPC service at the path specified by the `MINC_DB_SOCKET`
@@ -78,8 +79,9 @@ Development notes are stored in a compressed format inside `DEV_NOTES.dat`.
 Use `dev_notes/notes_manager.py` to append or read entries. Every note
 contains JSON metadata including an ID, timestamp, tags, personal flag,
 compression algorithm and optional `context` reference IDs. Older notes are
-automatically recompressed at higher levels (levels 8+ switch to LZMA for
-better space usage). Viewing a note adjusts compression for all entries and
+automatically recompressed at higher levels using an algorithmic RLE+zlib
+scheme that scales with the distance from the viewed entry. Viewing a note
+adjusts compression for all entries and
 also decompresses any context notes so they are easy to read. Notes can be
 filtered by tag.
 

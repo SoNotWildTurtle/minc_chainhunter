@@ -99,6 +99,10 @@ def setup_argparse() -> argparse.ArgumentParser:
     report_parser = subparsers.add_parser('report', help='Generate markdown report')
     report_parser.add_argument('--out_dir', default='reports', help='Output directory')
 
+    # Results command
+    results_parser = subparsers.add_parser('results', help='Show stored scan results')
+    results_parser.add_argument('-n', type=int, default=0, metavar='N', help='Show only the last N results')
+
     return parser
 
 def discover_modules() -> Dict[str, str]:
@@ -400,6 +404,15 @@ def main() -> int:
                 print(f"[+] Report written to {resp.get('path')}")
                 return 0
             print("[!] Failed to generate report")
+            return 1
+        elif args.command == 'results':
+            from analysis_db.db_api import get_results
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = get_results(sock, args.n)
+            if resp.get("status") == "ok":
+                print(json.dumps(resp.get("results", []), indent=2))
+                return 0
+            print("[!] Failed to fetch results")
             return 1
             
     except KeyboardInterrupt:

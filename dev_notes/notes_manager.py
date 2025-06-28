@@ -16,6 +16,47 @@ NOTES_PATH = os.environ.get(
 )
 
 
+def _rle_encode(data: bytes) -> bytes:
+    if not data:
+        return b""
+    out = bytearray()
+    last = data[0]
+    count = 1
+    for b in data[1:]:
+        if b == last and count < 255:
+            count += 1
+        else:
+            out.append(count)
+            out.append(last)
+            last = b
+            count = 1
+    out.append(count)
+    out.append(last)
+    return bytes(out)
+
+
+def _rle_decode(data: bytes) -> bytes:
+    out = bytearray()
+    it = iter(data)
+    for count in it:
+        val = next(it, None)
+        if val is None:
+            break
+        out.extend([val] * count)
+    return bytes(out)
+
+
+def _algo_compress(raw: bytes, level: int) -> bytes:
+    rle = _rle_encode(raw)
+    lvl = max(1, min(level, 9))
+    return zlib.compress(rle, lvl)
+
+
+def _algo_decompress(data: bytes) -> bytes:
+    rle = zlib.decompress(data)
+    return _rle_decode(rle)
+
+
 def _decode_line(line: str) -> Tuple[int, Dict]:
     parts = line.split(':', 2)
     if len(parts) == 3:
@@ -24,7 +65,9 @@ def _decode_line(line: str) -> Tuple[int, Dict]:
         level_str, b64 = parts
         alg = 'zlib'
     raw = base64.b64decode(b64)
-    if alg == 'lzma':
+    if alg == 'rle_zlib':
+        data = _algo_decompress(raw)
+    elif alg == 'lzma':
         data = lzma.decompress(raw)
     else:
         data = zlib.decompress(raw)
@@ -44,13 +87,10 @@ def _decode_line(line: str) -> Tuple[int, Dict]:
 
 
 def _encode_line(level: int, meta: Dict) -> str:
-    alg = 'lzma' if level >= 8 else 'zlib'
+    alg = 'rle_zlib'
     meta['alg'] = alg
     raw = json.dumps(meta).encode("utf-8")
-    if alg == 'lzma':
-        data = lzma.compress(raw)
-    else:
-        data = zlib.compress(raw, level)
+    data = _algo_compress(raw, level)
     return f"{level}:{alg}:{base64.b64encode(data).decode('utf-8')}"
 
 

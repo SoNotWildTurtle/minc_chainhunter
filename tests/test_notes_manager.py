@@ -35,10 +35,10 @@ def test_context_and_alg(tmp_path, monkeypatch):
     levels = [lvl for lvl, _ in nm.load_notes()]
     assert levels[0] == 1
     meta = nm.load_notes()[1][1]
-    assert meta['alg'] in ('zlib', 'lzma')
+    assert meta['alg'] == 'rle_zlib'
 
 
-def test_lzma_usage(tmp_path, monkeypatch):
+def test_algorithmic_usage(tmp_path, monkeypatch):
     path = tmp_path / 'notes.dat'
     monkeypatch.setitem(os.environ, 'DEV_NOTES_PATH', str(path))
     importlib.reload(nm)
@@ -46,4 +46,4 @@ def test_lzma_usage(tmp_path, monkeypatch):
         nm.add_note(f'n{i}')
     level, meta = nm.load_notes()[0]
     assert level == 9
-    assert meta['alg'] == 'lzma'
+    assert meta['alg'] == 'rle_zlib'

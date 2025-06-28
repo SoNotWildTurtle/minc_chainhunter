@@ -1,6 +1,7 @@
 """Dummy SQL injection scanner module."""
 
 import sys
+from analysis_db.chat_analyzer import analyze_result
 
 
 def main():
@@ -9,9 +10,14 @@ def main():
         return False
     url = sys.argv[1]
     print(f"[+] Scanning {url} for SQL injection...")
-    # Placeholder logic
+    # Placeholder logic that always reports no vulnerabilities
+    vulnerabilities = []
     print("[-] No vulnerabilities found")
-    return True
+    result = {"target": url, "vulnerabilities": vulnerabilities}
+    analysis = analyze_result(result)
+    result.update(analysis)
+    return result
+
 
 if __name__ == "__main__":
     main()

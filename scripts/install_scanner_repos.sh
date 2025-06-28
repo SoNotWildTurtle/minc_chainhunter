@@ -18,5 +18,7 @@ install_repo() {
 
 install_repo gitleaks https://github.com/gitleaks/gitleaks.git
 install_repo ssrfmap https://github.com/swisskyrepo/SSRFmap.git
+install_repo nuclei https://github.com/projectdiscovery/nuclei.git
+install_repo dirsearch https://github.com/maurosoria/dirsearch.git
 
 echo "[+] Scanner repositories installed"

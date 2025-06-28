@@ -174,10 +174,21 @@ def run_module(name: str, args: List[str]) -> bool:
         
         logger.info(f"Running module: {name}")
         result = mod.main()
-        
+
         # Restore original args
         sys.argv = original_argv
-        
+
+        # If module returns structured result, log to DB
+        if isinstance(result, dict):
+            try:
+                from analysis_db.db_api import log_scan_result
+                sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+                payload = {"module": name, **result}
+                log_scan_result(sock, payload)
+            except Exception as e:
+                logger.error(f"Failed to log result: {e}")
+            return True
+
         return result is not False
     except Exception as e:
         logger.error(f"Error running module {name}: {str(e)}")

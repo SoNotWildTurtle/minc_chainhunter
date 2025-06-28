@@ -7,3 +7,4 @@
 - add manager scripts for each directory
 - implement progressive compression for dev notes
 - add slider-based viewer that recompresses distant entries
+- extend dev notes format with metadata and tag searching

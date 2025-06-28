@@ -75,14 +75,18 @@ These helpers make it easy to automate tasks with minimal commands.
 ## Developer notes
 
 Development notes are stored in a compressed format inside `DEV_NOTES.dat`.
-Use `dev_notes/notes_manager.py` to append or read entries. Older notes are
-automatically recompressed at higher levels so the file remains small.
-You can view any note index with dynamic recompression so nearby notes are
-easier to read while distant ones become more compressed.
+Use `dev_notes/notes_manager.py` to append or read entries. Every note
+contains JSON metadata (ID, timestamp, tags and a personal flag) which is
+compressed along with the text. Older notes are automatically recompressed at
+higher levels so the file remains small. You can view any note index with
+dynamic recompression so nearby notes are easier to read while distant ones
+become more compressed. Notes can also be filtered by tag.
 
 ```bash
 python3 dev_notes/notes_manager.py --add "Reminder to revisit sandbox perms"
+python3 dev_notes/notes_manager.py --add "personal thoughts" --tags personal
 python3 dev_notes/notes_manager.py --show 3
 python3 dev_notes/notes_manager.py --view 0 --radius 1
+python3 dev_notes/notes_manager.py --show 5 --tag personal
 ```
 Set `DEV_NOTES_PATH` to override the default notes file location when testing.

@@ -1,8 +1,8 @@
 - integrate CLI with IPC database server
 - add command to generate reports from stored results
-- create additional recon/vuln modules
+- create additional recon/vuln modules (dns lookup, xxe scanner)
 - enhance sandboxing and security
-- implement self-update mechanism
+- implement self-update mechanism via git pull
 
 - add manager scripts for each directory
 - implement progressive compression for dev notes

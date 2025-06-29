@@ -24,6 +24,8 @@ Example modules include:
   `--param` and optional POST data.
 - `gitleaks_scan` – scan a repository for secrets with `--redact` and custom
   configuration via `--config`.
+- `dns_lookup` – resolve DNS records for a domain.
+- `xxe_scan` – placeholder XXE scanner using a custom payload.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
 
@@ -90,6 +92,13 @@ python3 cli/main.py run bug_hunt 127.0.0.1
 ```
 
 Use the normal `results` and `report` commands to view pipeline output.
+
+## Self-update
+
+Running `python3 cli/main.py update` performs a `git pull` in the ChainHunter
+repository to fetch the latest changes. Pass `--force` to always pull even when
+the local commit matches the remote. If the repository has no configured
+upstream, the command exits without changes.
 
 ## Developer notes
 

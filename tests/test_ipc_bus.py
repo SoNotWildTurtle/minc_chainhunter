@@ -10,3 +10,5 @@ def test_module_discovery():
     mods = discover_modules()
     assert "ping_sweep" in mods
     assert "sqli_scanner" in mods
+    assert "dns_lookup" in mods
+    assert "xxe_scan" in mods

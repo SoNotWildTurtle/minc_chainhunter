@@ -22,6 +22,7 @@ import glob
 import argparse
 import logging
 import json
+import subprocess
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
@@ -294,34 +295,35 @@ def interactive_mode() -> None:
                 traceback.print_exc()
             break
 
-def update_minc(force: bool = False) -> bool:
-    """Update MINC ChainHunter to the latest version."""
+def update_minc(force: bool = False, repo_dir: str | None = None) -> bool:
+    """Update MINC ChainHunter by pulling latest changes via git."""
     print("\n[*] Checking for updates...")
+    repo_root = Path(repo_dir) if repo_dir else Path(__file__).resolve().parents[1]
     try:
-        # TODO: Implement actual update check logic
-        print("  - Connecting to update server...")
-        print("  - Checking for new versions...")
-        
-        # Simulate update process
-        import time
-        time.sleep(1)
-        
-        if force:
-            print("  - Forcing update...")
-            time.sleep(1)
-            print("  - Updating core components...")
-            time.sleep(1)
-            print("  - Updating modules...")
-            time.sleep(1)
-            print("  - Cleaning up...")
-            time.sleep(0.5)
+        if not (repo_root / ".git").is_dir():
+            print("  - No git repository found")
+            return False
+
+        print("  - Fetching updates from origin...")
+        subprocess.run(["git", "fetch"], cwd=repo_root, check=False, stdout=subprocess.DEVNULL)
+        # Determine local and remote HEAD
+        local = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_root).strip()
+        remote = None
+        try:
+            remote = subprocess.check_output(["git", "rev-parse", "@{u}"], cwd=repo_root).strip()
+        except subprocess.CalledProcessError:
+            print("  - No upstream configured for this repo")
+            return False
+
+        if force or local != remote:
+            print("  - Pulling latest changes...")
+            subprocess.run(["git", "pull"], cwd=repo_root, check=False)
             print("\n[+] Update completed successfully!")
             return True
-        else:
-            print("  - MINC ChainHunter is up to date!")
-            print("    Use 'minc update --force' to force an update.")
-            return True
-            
+
+        print("  - MINC ChainHunter is up to date!")
+        return True
+
     except Exception as e:
         logger.error(f"Update failed: {str(e)}")
         return False

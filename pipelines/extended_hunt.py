@@ -1,0 +1,41 @@
+import importlib
+import sys
+from typing import List, Dict
+
+STEPS = [
+    ("subfinder_scan", "recon_modules.subfinder_scan"),
+    ("hakrawler_scan", "recon_modules.hakrawler_scan"),
+    ("dirsearch_scan", "vuln_modules.dirsearch_scan"),
+    ("nuclei_scan", "vuln_modules.nuclei_scan"),
+    ("gitleaks_scan", "vuln_modules.gitleaks_scan"),
+    ("trufflehog_scan", "vuln_modules.trufflehog_scan"),
+]
+
+
+def run_step(mod_name: str, module_path: str, target: str) -> Dict:
+    mod = importlib.import_module(module_path)
+    sys.argv = [mod_name, target]
+    if hasattr(mod, "main"):
+        res = mod.main()
+        if isinstance(res, dict):
+            res["module"] = mod_name
+            return res
+    return {}
+
+
+def main(argv: List[str] | None = None):
+    argv = argv or sys.argv[1:]
+    if not argv:
+        print("Usage: extended_hunt.py <target>")
+        return False
+    target = argv[0]
+    results = []
+    for name, path in STEPS:
+        res = run_step(name, path, target)
+        if res:
+            results.append(res)
+    return {"target": target, "steps": results}
+
+
+if __name__ == "__main__":
+    main()

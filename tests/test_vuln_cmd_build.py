@@ -7,6 +7,7 @@ import vuln_modules.dirsearch_scan as ds
 import vuln_modules.gitleaks_scan as gl
 import vuln_modules.nuclei_scan as nu
 import vuln_modules.ssrfmap_scan as sm
+import vuln_modules.trufflehog_scan as th
 
 
 def test_dirsearch_cmd_build():
@@ -44,3 +45,11 @@ def test_ssrfmap_cmd_build():
     assert cmd[2] == "http://x"
     assert "-p" in cmd and cmd[cmd.index("-p") + 1] == "v"
     assert "-d" in cmd and cmd[cmd.index("-d") + 1] == "a=1"
+
+
+def test_trufflehog_cmd_build():
+    cmd = th.build_trufflehog_cmd("repo", regex=True)
+    script = os.path.join(os.path.dirname(th.__file__), "..", "github_scanners", "trufflehog", "run.sh")
+    assert cmd[:2] == ["bash", script]
+    assert cmd[2] == "repo"
+    assert "--regex" in cmd

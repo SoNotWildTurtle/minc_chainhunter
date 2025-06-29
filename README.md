@@ -24,10 +24,13 @@ Example modules include:
   `--param` and optional POST data.
 - `gitleaks_scan` – scan a repository for secrets with `--redact` and custom
   configuration via `--config`.
+- `trufflehog_scan` – run truffleHog to detect secrets in repositories.
 - `dns_lookup` – resolve DNS records for a domain.
 - `xxe_scan` – placeholder XXE scanner using a custom payload.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
+- `extended_hunt` – run several scanners (subfinder, hakrawler, dirsearch,
+  nuclei, gitleaks, trufflehog) in sequence for deeper analysis.
 
 The IPC bus components are under development. `bus_integrity.py` includes helper functions to verify socket permissions and approved command aliases.
 
@@ -51,6 +54,7 @@ following upstream tools are fetched:
 - **dirsearch** – web directory brute forcing
 - **subfinder** – subdomain enumeration
 - **hakrawler** – site crawling and link discovery
+- **trufflehog** – secrets scanning via truffleHog
 
 Feel free to add additional tools by editing the script.
 
@@ -68,7 +72,9 @@ bus. Reports are written to the `reports/` directory by default. Use
 
 You can launch the analysis database server with `scripts/setup_ipc_bus.sh`,
 which starts the IPC service at the path specified by the `MINC_DB_SOCKET`
-environment variable.
+environment variable. The server now drops privileges to the `nobody` user by
+default when started through the sandbox scripts, ensuring results are written
+with secure permissions.
 
 ## Manager scripts
 
@@ -81,10 +87,10 @@ python3 vuln_modules/manager.py run nuclei_scan https://example.com
 
 These helpers make it easy to automate tasks with minimal commands.
 
-## Bug hunting pipeline
+## Bug hunting pipelines
 
-The `bug_hunt` pipeline module demonstrates automated scanning. It runs
-`ping_sweep` followed by `sqli_scanner` and stores the aggregated result in the
+The `bug_hunt` pipeline demonstrates basic automation by running
+`ping_sweep` followed by `sqli_scanner` and storing the aggregated result in the
 analysis database:
 
 ```bash
@@ -92,6 +98,16 @@ python3 cli/main.py run bug_hunt 127.0.0.1
 ```
 
 Use the normal `results` and `report` commands to view pipeline output.
+
+`extended_hunt` chains a larger set of modules for deeper bug hunting:
+
+```bash
+python3 cli/main.py run extended_hunt https://example.com
+```
+
+This sequence performs subdomain discovery, crawling, directory brute force,
+generic vulnerability scanning and secret detection before saving combined
+results.
 
 ## Self-update
 

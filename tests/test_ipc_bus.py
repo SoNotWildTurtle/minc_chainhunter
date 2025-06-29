@@ -12,3 +12,5 @@ def test_module_discovery():
     assert "sqli_scanner" in mods
     assert "dns_lookup" in mods
     assert "xxe_scan" in mods
+    assert "trufflehog_scan" in mods
+    assert "extended_hunt" in mods

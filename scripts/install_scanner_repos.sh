@@ -22,5 +22,6 @@ install_repo nuclei https://github.com/projectdiscovery/nuclei.git
 install_repo dirsearch https://github.com/maurosoria/dirsearch.git
 install_repo subfinder https://github.com/projectdiscovery/subfinder.git
 install_repo hakrawler https://github.com/hakluke/hakrawler.git
+install_repo trufflehog https://github.com/trufflesecurity/trufflehog.git
 
 echo "[+] Scanner repositories installed"

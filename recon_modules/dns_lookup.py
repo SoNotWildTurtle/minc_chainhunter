@@ -1,7 +1,9 @@
 """Resolve DNS records for a domain."""
 
+import os
 import socket
 import sys
+from analysis_db.db_api import log_scan_result
 
 
 def main(argv=None):
@@ -13,10 +15,17 @@ def main(argv=None):
     try:
         _, _, ips = socket.gethostbyname_ex(domain)
         print(f"[+] {domain} -> {', '.join(ips)}")
-        return {"target": domain, "ips": ips}
+        result = {"target": domain, "ips": ips}
     except Exception as e:
         print(f"[!] Lookup failed: {e}")
-        return {"target": domain, "error": str(e)}
+        result = {"target": domain, "error": str(e)}
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "dns_lookup", **result})
+        except Exception:
+            pass
+    return result
 
 
 if __name__ == "__main__":

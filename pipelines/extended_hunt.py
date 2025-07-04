@@ -1,6 +1,9 @@
 import importlib
+import os
 import sys
 from typing import List, Dict
+
+from analysis_db.db_api import log_scan_result
 
 STEPS = [
     ("subfinder_scan", "recon_modules.subfinder_scan"),
@@ -38,4 +41,10 @@ def main(argv: List[str] | None = None):
 
 
 if __name__ == "__main__":
-    main()
+    summary = main()
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "extended_hunt", **summary})
+        except Exception:
+            pass

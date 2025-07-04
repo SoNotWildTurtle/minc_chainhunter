@@ -14,7 +14,7 @@ def test_extended_hunt_pipeline(tmp_path):
     sock = tmp_path / "db.sock"
     db_dir = tmp_path / "data"
 
-    t = threading.Thread(target=start_db_server, args=(str(db_dir), str(sock), True))
+    t = threading.Thread(target=start_db_server, args=(str(db_dir), str(sock), False), daemon=True)
     t.start()
     time.sleep(0.1)
     env = os.environ.copy()
@@ -25,13 +25,13 @@ def test_extended_hunt_pipeline(tmp_path):
         text=True,
         env=env,
     )
-    t.join()
+    # server thread continues in background
 
     assert proc.returncode == 0
     with open(db_dir / "results.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-    assert len(data) == 1
-    entry = data[0]
+    assert len(data) == 7
+    entry = data[-1]
     assert entry["module"] == "extended_hunt"
     steps = entry.get("steps", [])
     step_names = {s["module"] for s in steps}

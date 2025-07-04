@@ -3,6 +3,7 @@
 import os
 import subprocess
 import sys
+from analysis_db.db_api import log_scan_result
 
 from analysis_db.chat_analyzer import analyze_result
 
@@ -16,6 +17,12 @@ def main():
     proc = subprocess.run(["bash", script, "-d", domain], capture_output=True, text=True)
     result = {"target": domain, "output": proc.stdout.strip()}
     result.update(analyze_result(result))
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "subfinder_scan", **result})
+        except Exception:
+            pass
     return result
 
 

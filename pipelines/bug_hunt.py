@@ -1,8 +1,11 @@
 """Simple bug hunting pipeline example."""
 
 import importlib
+import os
 import sys
 from typing import List, Dict
+
+from analysis_db.db_api import log_scan_result
 
 STEPS = [
     ("ping_sweep", "recon_modules.ping_sweep"),
@@ -36,4 +39,10 @@ def main(argv: List[str] | None = None):
 
 
 if __name__ == "__main__":
-    main()
+    summary = main()
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "bug_hunt", **summary})
+        except Exception:
+            pass

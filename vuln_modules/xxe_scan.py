@@ -1,7 +1,9 @@
 """Placeholder XXE vulnerability scanner."""
 
 import argparse
+import os
 import sys
+from analysis_db.db_api import log_scan_result
 
 from analysis_db.chat_analyzer import analyze_result
 
@@ -26,6 +28,12 @@ def main(argv=None):
         "vulnerabilities": vulnerabilities,
     }
     result.update(analyze_result(result))
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "xxe_scan", **result})
+        except Exception:
+            pass
     return result
 
 

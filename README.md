@@ -31,6 +31,9 @@ Example modules include:
   with results saved through the CLI.
 - `extended_hunt` – run several scanners (subfinder, hakrawler, dirsearch,
   nuclei, gitleaks, trufflehog) in sequence for deeper analysis.
+- Modules automatically log results to the analysis database whenever the
+  `MINC_DB_SOCKET` environment variable is set, so pipeline steps are stored
+  alongside their summaries.
 
 The IPC bus components are under development. `bus_integrity.py` includes helper functions to verify socket permissions and approved command aliases.
 
@@ -64,6 +67,8 @@ When a module returns a structured result, ChainHunter sends it over the IPC bus
 to the sandboxed analysis database. Results are written to JSON files and, if an
 OpenAI API key is configured, processed by ChatGPT for tagging and a short
 summary. Reports are stored in `db_data/results.json`.
+Modules run outside the CLI also perform this logging automatically whenever
+`MINC_DB_SOCKET` is defined.
 
 To generate a consolidated markdown report of all stored results, either run the
 CLI command `python3 cli/main.py report` or send the `report` alias over the IPC

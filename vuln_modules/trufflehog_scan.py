@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 import sys
+from analysis_db.db_api import log_scan_result
 from typing import List
 
 from analysis_db.chat_analyzer import analyze_result
@@ -29,6 +30,12 @@ def main(argv: List[str] | None = None):
     proc = subprocess.run(cmd, capture_output=True, text=True)
     result = {"target": args.repo_dir, "output": proc.stdout.strip()}
     result.update(analyze_result(result))
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "trufflehog_scan", **result})
+        except Exception:
+            pass
     return result
 
 

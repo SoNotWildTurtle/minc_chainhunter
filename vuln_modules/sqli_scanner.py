@@ -1,7 +1,9 @@
 """Dummy SQL injection scanner module."""
 
+import os
 import sys
 from analysis_db.chat_analyzer import analyze_result
+from analysis_db.db_api import log_scan_result
 
 
 def main():
@@ -16,6 +18,12 @@ def main():
     result = {"target": url, "vulnerabilities": vulnerabilities}
     analysis = analyze_result(result)
     result.update(analysis)
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "sqli_scanner", **result})
+        except Exception:
+            pass
     return result
 
 

@@ -1,7 +1,9 @@
 """Simple ping sweep module for Chainhunter."""
 
+import os
 import subprocess
 import sys
+from analysis_db.db_api import log_scan_result
 
 
 def main():
@@ -17,7 +19,14 @@ def main():
     except subprocess.CalledProcessError:
         print("[-] Host unreachable")
         reachable = False
-    return {"target": target, "reachable": reachable}
+    result = {"target": target, "reachable": reachable}
+    sock = os.environ.get("MINC_DB_SOCKET")
+    if sock:
+        try:
+            log_scan_result(sock, {"module": "ping_sweep", **result})
+        except Exception:
+            pass
+    return result
 
 
 if __name__ == "__main__":

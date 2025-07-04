@@ -16,3 +16,5 @@
 - improve sandbox DB security with privilege dropping
 - add extended bug hunting pipeline using multiple scanners
 - log individual module results in addition to pipeline summaries
+- create pipeline to scan git repositories for secrets using gitleaks and
+  trufflehog

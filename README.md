@@ -31,6 +31,8 @@ Example modules include:
   with results saved through the CLI.
 - `extended_hunt` – run several scanners (subfinder, hakrawler, dirsearch,
   nuclei, gitleaks, trufflehog) in sequence for deeper analysis.
+- `repo_hunt` – scan a repository with gitleaks and trufflehog to uncover
+  secrets.
 - Modules automatically log results to the analysis database whenever the
   `MINC_DB_SOCKET` environment variable is set, so pipeline steps are stored
   alongside their summaries.
@@ -113,6 +115,14 @@ python3 cli/main.py run extended_hunt https://example.com
 This sequence performs subdomain discovery, crawling, directory brute force,
 generic vulnerability scanning and secret detection before saving combined
 results.
+
+`repo_hunt` focuses on repository secrets detection using gitleaks and
+trufflehog:
+
+```bash
+python3 cli/main.py run repo_hunt path/to/repo
+```
+
 
 ## Self-update
 

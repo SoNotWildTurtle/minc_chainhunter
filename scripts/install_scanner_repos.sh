@@ -27,5 +27,7 @@ install_repo theharvester https://github.com/laramies/theHarvester.git
 install_repo amass https://github.com/owasp-amass/amass.git
 install_repo masscan https://github.com/robertdavidgraham/masscan.git
 install_repo nmap https://github.com/nmap/nmap.git
+install_repo git_dumper https://github.com/arthaud/git-dumper.git
+install_repo aquatone https://github.com/michenriksen/aquatone.git
 
 echo "[+] Scanner repositories installed"

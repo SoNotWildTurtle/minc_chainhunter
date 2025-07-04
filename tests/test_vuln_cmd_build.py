@@ -9,6 +9,7 @@ import vuln_modules.nuclei_scan as nu
 import vuln_modules.ssrfmap_scan as sm
 import vuln_modules.trufflehog_scan as th
 import vuln_modules.nmap_scan as nm
+import vuln_modules.git_dumper_scan as gd
 
 
 def test_dirsearch_cmd_build():
@@ -62,3 +63,11 @@ def test_nmap_cmd_build():
     assert cmd[:2] == ["bash", script]
     assert cmd[2] == "example.com"
     assert "-sS" in cmd
+
+
+def test_git_dumper_cmd_build():
+    cmd = gd.build_git_dumper_cmd("http://ex.com", out_dir="repo")
+    script = os.path.join(os.path.dirname(gd.__file__), "..", "github_scanners", "git_dumper", "run.sh")
+    assert cmd[:2] == ["bash", script]
+    assert cmd[2] == "http://ex.com"
+    assert cmd[3] == "repo"

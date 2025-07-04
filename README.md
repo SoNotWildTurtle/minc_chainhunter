@@ -30,6 +30,8 @@ Example modules include:
 - `amass_scan` – perform subdomain enumeration using Amass.
 - `masscan_scan` – fast port scanning with masscan.
 - `nmap_scan` – service enumeration using nmap.
+- `aquatone_scan` – screenshot discovered hosts with aquatone.
+- `git_dumper_scan` – dump exposed `.git` directories.
 - `xxe_scan` – placeholder XXE scanner using a custom payload.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
@@ -68,6 +70,8 @@ following upstream tools are fetched:
 - **amass** – advanced subdomain enumeration framework
 - **masscan** – lightning-fast port scanner
 - **nmap** – network scanner with scripting engine
+- **git-dumper** – dump exposed git repositories
+- **aquatone** – screenshotting tool for discovered hosts
 
 Feel free to add additional tools by editing the script.
 

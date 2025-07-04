@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import recon_modules.theharvester_scan as th
 import recon_modules.amass_scan as am
 import recon_modules.masscan_scan as ma
+import recon_modules.aquatone_scan as aq
 
 
 def test_theharvester_cmd_build():
@@ -32,3 +33,11 @@ def test_masscan_cmd_build():
     assert cmd[2] == "1.2.3.4"
     assert "-p" in cmd and cmd[cmd.index("-p") + 1] == "80"
     assert "--rate" in cmd and cmd[cmd.index("--rate") + 1] == "5000"
+
+
+def test_aquatone_cmd_build():
+    cmd = aq.build_aquatone_cmd("example.com", out_dir="out")
+    script = os.path.join(os.path.dirname(aq.__file__), "..", "github_scanners", "aquatone", "run.sh")
+    assert cmd[:2] == ["bash", script]
+    assert cmd[2] == "example.com"
+    assert cmd[3] == "out"

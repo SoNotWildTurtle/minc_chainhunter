@@ -28,3 +28,4 @@
 - add masscan and nmap modules for aggressive scanning
 - add aquatone and git_dumper modules with repo installation
 - investigate neural network analysis of recon results to guide pipeline chaining
+- develop comprehensive self-healing tests to reinstall scanners and validate DB integrity

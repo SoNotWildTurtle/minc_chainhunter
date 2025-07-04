@@ -23,5 +23,7 @@ install_repo dirsearch https://github.com/maurosoria/dirsearch.git
 install_repo subfinder https://github.com/projectdiscovery/subfinder.git
 install_repo hakrawler https://github.com/hakluke/hakrawler.git
 install_repo trufflehog https://github.com/trufflesecurity/trufflehog.git
+install_repo theharvester https://github.com/laramies/theHarvester.git
+install_repo amass https://github.com/owasp-amass/amass.git
 
 echo "[+] Scanner repositories installed"

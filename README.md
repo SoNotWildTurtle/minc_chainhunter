@@ -26,6 +26,8 @@ Example modules include:
   configuration via `--config`.
 - `trufflehog_scan` – run truffleHog to detect secrets in repositories.
 - `dns_lookup` – resolve DNS records for a domain.
+- `theharvester_scan` – gather emails and subdomains with theHarvester.
+- `amass_scan` – perform subdomain enumeration using Amass.
 - `xxe_scan` – placeholder XXE scanner using a custom payload.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
@@ -60,6 +62,8 @@ following upstream tools are fetched:
 - **subfinder** – subdomain enumeration
 - **hakrawler** – site crawling and link discovery
 - **trufflehog** – secrets scanning via truffleHog
+- **theHarvester** – OSINT gathering tool for emails and subdomains
+- **amass** – advanced subdomain enumeration framework
 
 Feel free to add additional tools by editing the script.
 

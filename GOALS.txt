@@ -24,3 +24,4 @@
 - refine ChatGPT tagging for database results
 - integrate repo_hunt pipeline with automatic reporting
 - verify extended_hunt pipeline results and automate ChatGPT bug reports
+- add recon modules for theHarvester and amass and verify installation

@@ -34,5 +34,6 @@ install_repo masscan https://github.com/robertdavidgraham/masscan.git
 install_repo nmap https://github.com/nmap/nmap.git
 install_repo git_dumper https://github.com/arthaud/git-dumper.git
 install_repo aquatone https://github.com/michenriksen/aquatone.git
+install_repo xsstrike https://github.com/s0md3v/XSStrike.git
 
 echo "[+] Scanner repositories installed"

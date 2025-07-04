@@ -33,6 +33,7 @@ Example modules include:
 - `aquatone_scan` – screenshot discovered hosts with aquatone.
 - `git_dumper_scan` – dump exposed `.git` directories.
 - `xxe_scan` – placeholder XXE scanner using a custom payload.
+- `xsstrike_scan` – detect reflected XSS vulnerabilities using XSStrike.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
 - `extended_hunt` – run several scanners (subfinder, hakrawler, dirsearch,
@@ -72,6 +73,7 @@ following upstream tools are fetched:
 - **nmap** – network scanner with scripting engine
 - **git-dumper** – dump exposed git repositories
 - **aquatone** – screenshotting tool for discovered hosts
+- **XSStrike** – advanced XSS detection tool
 
 Feel free to add additional tools by editing the script.
 

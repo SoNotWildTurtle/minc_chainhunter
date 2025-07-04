@@ -10,6 +10,7 @@ import vuln_modules.ssrfmap_scan as sm
 import vuln_modules.trufflehog_scan as th
 import vuln_modules.nmap_scan as nm
 import vuln_modules.git_dumper_scan as gd
+import vuln_modules.xsstrike_scan as xs
 
 
 def test_dirsearch_cmd_build():
@@ -71,3 +72,11 @@ def test_git_dumper_cmd_build():
     assert cmd[:2] == ["bash", script]
     assert cmd[2] == "http://ex.com"
     assert cmd[3] == "repo"
+
+
+def test_xsstrike_cmd_build():
+    cmd = xs.build_xsstrike_cmd("http://victim", crawl=True)
+    script = os.path.join(os.path.dirname(xs.__file__), "..", "github_scanners", "xsstrike", "run.sh")
+    assert cmd[:2] == ["bash", script]
+    assert "-u" in cmd and cmd[cmd.index("-u") + 1] == "http://victim"
+    assert "--crawl" in cmd

@@ -25,5 +25,7 @@ install_repo hakrawler https://github.com/hakluke/hakrawler.git
 install_repo trufflehog https://github.com/trufflesecurity/trufflehog.git
 install_repo theharvester https://github.com/laramies/theHarvester.git
 install_repo amass https://github.com/owasp-amass/amass.git
+install_repo masscan https://github.com/robertdavidgraham/masscan.git
+install_repo nmap https://github.com/nmap/nmap.git
 
 echo "[+] Scanner repositories installed"

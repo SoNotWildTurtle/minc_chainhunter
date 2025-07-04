@@ -28,6 +28,8 @@ Example modules include:
 - `dns_lookup` – resolve DNS records for a domain.
 - `theharvester_scan` – gather emails and subdomains with theHarvester.
 - `amass_scan` – perform subdomain enumeration using Amass.
+- `masscan_scan` – fast port scanning with masscan.
+- `nmap_scan` – service enumeration using nmap.
 - `xxe_scan` – placeholder XXE scanner using a custom payload.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
@@ -64,6 +66,8 @@ following upstream tools are fetched:
 - **trufflehog** – secrets scanning via truffleHog
 - **theHarvester** – OSINT gathering tool for emails and subdomains
 - **amass** – advanced subdomain enumeration framework
+- **masscan** – lightning-fast port scanner
+- **nmap** – network scanner with scripting engine
 
 Feel free to add additional tools by editing the script.
 

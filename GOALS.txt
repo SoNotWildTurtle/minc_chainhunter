@@ -25,3 +25,5 @@
 - integrate repo_hunt pipeline with automatic reporting
 - verify extended_hunt pipeline results and automate ChatGPT bug reports
 - add recon modules for theHarvester and amass and verify installation
+- add masscan and nmap modules for aggressive scanning
+- investigate neural network analysis of recon results to guide pipeline chaining

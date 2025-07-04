@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 import recon_modules.theharvester_scan as th
 import recon_modules.amass_scan as am
+import recon_modules.masscan_scan as ma
 
 
 def test_theharvester_cmd_build():
@@ -22,3 +23,12 @@ def test_amass_cmd_build():
     assert cmd[:2] == ["bash", script]
     assert "enum" in cmd
     assert "-d" in cmd and cmd[cmd.index("-d") + 1] == "example.com"
+
+
+def test_masscan_cmd_build():
+    cmd = ma.build_masscan_cmd("1.2.3.4", ports="80", rate=5000)
+    script = os.path.join(os.path.dirname(ma.__file__), "..", "github_scanners", "masscan", "run.sh")
+    assert cmd[:2] == ["bash", script]
+    assert cmd[2] == "1.2.3.4"
+    assert "-p" in cmd and cmd[cmd.index("-p") + 1] == "80"
+    assert "--rate" in cmd and cmd[cmd.index("--rate") + 1] == "5000"

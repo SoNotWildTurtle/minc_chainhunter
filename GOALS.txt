@@ -18,3 +18,4 @@
 - log individual module results in addition to pipeline summaries
 - create pipeline to scan git repositories for secrets using gitleaks and
   trufflehog
+- verify DB handles approved aliases over IPC

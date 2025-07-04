@@ -9,8 +9,13 @@ install_repo() {
     local url="$2"
     local dest="${SCANNER_DIR}/${name}/src"
     if [ ! -d "$dest/.git" ]; then
-        echo "[+] Cloning $name from $url"
-        git clone "$url" "$dest"
+        if [ -n "$SKIP_CLONE" ]; then
+            echo "[*] skipping clone $name"
+            mkdir -p "$dest"
+        else
+            echo "[+] Cloning $name from $url"
+            git clone "$url" "$dest"
+        fi
     else
         echo "[*] $name already installed"
     fi

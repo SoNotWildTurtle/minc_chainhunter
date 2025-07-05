@@ -166,3 +166,13 @@ python3 dev_notes/notes_manager.py --view 0 --radius 1
 python3 dev_notes/notes_manager.py --show 5 --tag personal
 ```
 Set `DEV_NOTES_PATH` to override the default notes file location when testing.
+
+## Version analysis utility
+
+Use `version_analyzer.py` to compare recent git commits and recommend the best version based on test count and total lines of code.
+
+```bash
+python3 version_analyzer.py --count 4
+```
+
+The script prints a summary for each commit analyzed and suggests the most feature-rich version.

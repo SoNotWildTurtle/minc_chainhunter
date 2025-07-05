@@ -104,6 +104,10 @@ def setup_argparse() -> argparse.ArgumentParser:
     results_parser = subparsers.add_parser('results', help='Show stored scan results')
     results_parser.add_argument('-n', type=int, default=0, metavar='N', help='Show only the last N results')
 
+    # Suggest command
+    suggest_parser = subparsers.add_parser('suggest', help='Suggest pipeline using neural analyzer')
+    suggest_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
+
     return parser
 
 def discover_modules() -> Dict[str, str]:
@@ -415,6 +419,17 @@ def main() -> int:
             resp = get_results(sock, args.n)
             if resp.get("status") == "ok":
                 print(json.dumps(resp.get("results", []), indent=2))
+                return 0
+            print("[!] Failed to fetch results")
+            return 1
+        elif args.command == 'suggest':
+            from analysis_db.db_api import get_results
+            from analysis_db.neural_analyzer import suggest_pipeline
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = get_results(sock, args.n)
+            if resp.get("status") == "ok":
+                pipeline = suggest_pipeline(resp.get("results", []))
+                print(pipeline)
                 return 0
             print("[!] Failed to fetch results")
             return 1

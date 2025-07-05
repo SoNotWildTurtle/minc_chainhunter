@@ -192,3 +192,10 @@ pipeline = suggest_pipeline([
 ])
 print(pipeline)
 ```
+
+You can also let ChainHunter analyze recent results stored in the database and
+print a recommended pipeline directly:
+
+```bash
+python3 cli/main.py suggest -n 5
+```

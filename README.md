@@ -176,3 +176,19 @@ python3 version_analyzer.py --count 4
 ```
 
 The script prints a summary for each commit analyzed and suggests the most feature-rich version.
+
+## Neural pipeline suggestion
+
+`analysis_db/neural_analyzer.py` contains a tiny neural network trained on synthetic
+data. It inspects previous scan results and recommends whether to run the
+`bug_hunt` or `extended_hunt` pipeline.
+
+```python
+from analysis_db.neural_analyzer import suggest_pipeline
+
+pipeline = suggest_pipeline([
+    {"ports": [80]},
+    {"ports": [22, 8080], "severity": "high"},
+])
+print(pipeline)
+```

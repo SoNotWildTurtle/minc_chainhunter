@@ -145,6 +145,16 @@ repository to fetch the latest changes. Pass `--force` to always pull even when
 the local commit matches the remote. If the repository has no configured
 upstream, the command exits without changes.
 
+## Self-evolution
+
+Use the `self-evolve` command to trigger Codex based upgrades. The command
+reads the current goals and attempts to run Codex using your `OPENAI_API_KEY`.
+If the key is missing, it simply reports that self-evolution was skipped.
+
+```bash
+python3 cli/main.py self-evolve
+```
+
 ## Developer notes
 
 Development notes are stored in a compressed format inside `DEV_NOTES.dat`.

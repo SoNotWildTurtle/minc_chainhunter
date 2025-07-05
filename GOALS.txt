@@ -31,3 +31,4 @@
 - integrate neural analyzer with CLI to recommend pipelines from stored results
 - develop comprehensive self-healing tests to reinstall scanners and validate DB integrity
 - consolidate to a single version and retire version analyzer
+- add 'self-evolve' CLI command to run Codex for automatic upgrades

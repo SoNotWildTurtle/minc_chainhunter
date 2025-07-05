@@ -108,6 +108,9 @@ def setup_argparse() -> argparse.ArgumentParser:
     suggest_parser = subparsers.add_parser('suggest', help='Suggest pipeline using neural analyzer')
     suggest_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
 
+    # Self-evolve command
+    subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
+
     return parser
 
 def discover_modules() -> Dict[str, str]:
@@ -433,6 +436,10 @@ def main() -> int:
                 return 0
             print("[!] Failed to fetch results")
             return 1
+        elif args.command == 'self-evolve':
+            from scripts.self_evolve import run_self_evolve
+            ok = run_self_evolve()
+            return 0 if ok else 1
             
     except KeyboardInterrupt:
         print("\n[!] Operation cancelled by user.")

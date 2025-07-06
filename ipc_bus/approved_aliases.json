@@ -1,0 +1,17 @@
+{
+  "aliases": [
+    "scan",
+    "update",
+    "info",
+    "report",
+    "results",
+    "search",
+    "purge",
+    "chat",
+    "plan"
+  ,
+    "train"
+  ,
+    "modules"
+  ]
+}

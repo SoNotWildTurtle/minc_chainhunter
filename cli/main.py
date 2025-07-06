@@ -217,10 +217,16 @@ def run_module(name: str, args: List[str]) -> bool:
         # If module returns structured result, log to DB
         if isinstance(result, dict):
             try:
-                from analysis_db.db_api import log_scan_result
+                from analysis_db.db_api import log_scan_result, generate_report
                 sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
                 payload = {"module": name, **result}
                 log_scan_result(sock, payload)
+                if os.environ.get("MINC_AUTO_REPORT"):
+                    out_dir = os.environ.get("MINC_AUTO_REPORT_DIR", "reports")
+                    try:
+                        generate_report(sock, out_dir)
+                    except Exception as rep_err:
+                        logger.error(f"Failed to auto-generate report: {rep_err}")
             except Exception as e:
                 logger.error(f"Failed to log result: {e}")
             return True

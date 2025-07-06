@@ -23,7 +23,7 @@
 
 - automate local cloning of scanner repositories when missing
 - refine ChatGPT tagging for database results
-- integrate repo_hunt pipeline with automatic reporting
+- integrate repo_hunt pipeline with automatic reporting using MINC_AUTO_REPORT
 - verify extended_hunt pipeline results and automate ChatGPT bug reports
 - add recon modules for theHarvester and amass and verify installation
 - add masscan and nmap modules for aggressive scanning

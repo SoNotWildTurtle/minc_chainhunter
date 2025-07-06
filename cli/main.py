@@ -458,8 +458,8 @@ def main() -> int:
                 pipeline = suggest_pipeline(results)
                 print(pipeline)
                 return 0
-                print("[!] Failed to fetch results")
-                return 1
+            print("[!] Failed to fetch results")
+            return 1
         elif args.command == 'notes':
             from dev_notes import notes_manager as nm
             if args.notes_cmd == 'add':

@@ -211,7 +211,8 @@ print(pipeline)
 ```
 
 You can also let ChainHunter analyze recent results stored in the database and
-print a recommended pipeline directly:
+print a recommended pipeline directly. The command updates the neural model
+using the fetched results before printing the suggestion:
 
 ```bash
 python3 cli/main.py suggest -n 5

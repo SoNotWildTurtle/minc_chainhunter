@@ -1,9 +1,9 @@
+# Short-term goals
 - integrate CLI with IPC database server
 - add command to generate reports from stored results
-- create additional recon/vuln modules (dns lookup, xxe scanner)
+- create additional recon and vulnerability modules (dns lookup, xxe scanner)
 - enhance sandboxing and security
 - implement self-update mechanism via git pull
-
 - add manager scripts for each directory
 - implement progressive compression for dev notes
 - add slider-based viewer that recompresses distant entries
@@ -17,10 +17,8 @@
 - improve sandbox DB security with privilege dropping
 - add extended bug hunting pipeline using multiple scanners
 - log individual module results in addition to pipeline summaries
-- create pipeline to scan git repositories for secrets using gitleaks and
-  trufflehog
+- create pipeline to scan git repositories for secrets using gitleaks and trufflehog
 - verify DB handles approved aliases over IPC
-
 - automate local cloning of scanner repositories when missing
 - refine ChatGPT tagging for database results
 - integrate repo_hunt pipeline with automatic reporting using MINC_AUTO_REPORT
@@ -31,12 +29,9 @@
 - add xsstrike module for XSS scanning and verify installation
 - integrate neural analyzer with CLI to recommend pipelines from stored results
 - develop comprehensive self-healing tests to reinstall scanners and validate DB integrity
-- consolidate to a single version and retire version analyzer
 - add 'self-evolve' CLI command to run Codex for automatic upgrades
 - enhance neural analyzer using collected scan data for improved recommendations
-- incorporate vulnerability counts and tags into neural analyzer features for
-  smarter pipeline chaining
-- document numpy and scikit-learn as dependencies
+- incorporate vulnerability counts and tags into neural analyzer features for smarter pipeline chaining
 - extend 'self-evolve' to run bug hunting and self-healing routines for automatic security upgrades
 - add self-heal command for standalone recovery
 - install systemd service to keep ChainHunter running
@@ -46,3 +41,14 @@
 - encrypt database results when MINC_ENCRYPT_KEY is set
 - limit IPC message size to reduce DoS risk
 - expand neural analyzer to consider additional pipelines
+
+# Long-term goals
+- consolidate to a single version and retire version analyzer
+- develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time
+- increase sophistication of the neural network AI into a general cybersecurity intelligence with chatbot capabilities
+- continuously grow the vulnerability and recon modules catalogue to cover new tools and techniques
+- maintain and improve sandbox isolation and security features as new threats arise
+- automate end-to-end bug bounty workflows from scanning to report generation
+
+# Notes
+Always work on these goals alongside user prompts.

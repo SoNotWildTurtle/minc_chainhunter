@@ -105,6 +105,11 @@ def setup_argparse() -> argparse.ArgumentParser:
     results_parser.add_argument('-n', type=int, default=0, metavar='N', help='Show only the last N results')
     results_parser.add_argument('--tag', help='Filter results by tag')
 
+    # Purge command
+    purge_parser = subparsers.add_parser('purge', help='Remove old scan results')
+    purge_parser.add_argument('--limit', type=int, required=True, metavar='N',
+                              help='Keep only the latest N results')
+
     # Suggest command
     suggest_parser = subparsers.add_parser('suggest', help='Suggest pipeline using neural analyzer')
     suggest_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
@@ -458,6 +463,15 @@ def main() -> int:
                 print(json.dumps(resp.get("results", []), indent=2))
                 return 0
             print("[!] Failed to fetch results")
+            return 1
+        elif args.command == 'purge':
+            from analysis_db.db_api import purge_results
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = purge_results(sock, args.limit)
+            if resp.get("status") == "ok":
+                print("[+] Database purged")
+                return 0
+            print("[!] Failed to purge results")
             return 1
         elif args.command == 'suggest':
             from analysis_db.db_api import get_results

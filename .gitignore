@@ -9,3 +9,4 @@ recon_modules/__pycache__/
 vuln_modules/__pycache__/
 pipelines/__pycache__/
 cli/__pycache__/
+analysis_db/model.pkl

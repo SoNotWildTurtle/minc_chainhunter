@@ -90,6 +90,9 @@ When a module returns a structured result, ChainHunter sends it over the IPC bus
 to the sandboxed analysis database. Results are written to JSON files and, if an
 OpenAI API key is configured, processed by ChatGPT for tagging and a short
 summary. Reports are stored in `db_data/results.json`.
+Set `MINC_IPC_SECRET` to require a shared secret for all IPC requests.
+Clients automatically include this value and the server rejects requests with an
+incorrect secret.
 Modules run outside the CLI also perform this logging automatically whenever
 `MINC_DB_SOCKET` is defined.
 
@@ -99,6 +102,8 @@ To generate a consolidated markdown report of all stored results, either run the
 CLI command `python3 cli/main.py report` or send the `report` alias over the IPC
 bus. Reports are written to the `reports/` directory by default. Use
 `python3 cli/main.py results` to quickly display stored entries.
+Run `python3 cli/main.py purge --limit 50` to keep only the most recent 50
+results if the database grows large.
 
 You can launch the analysis database server with `scripts/setup_ipc_bus.sh`,
 which starts the IPC service at the path specified by the `MINC_DB_SOCKET`

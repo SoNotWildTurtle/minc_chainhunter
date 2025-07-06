@@ -5,6 +5,7 @@
     "info",
     "report",
     "results",
-    "search"
+    "search",
+    "purge"
   ]
 }

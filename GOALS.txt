@@ -42,3 +42,4 @@
 - install systemd service to keep ChainHunter running
 - persist neural analyzer model to disk for consistent suggestions
 - allow searching stored results by tag via CLI
+- add optional IPC secret and command to purge old DB entries

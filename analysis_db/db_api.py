@@ -40,3 +40,12 @@ def search_results(sock_path: str, tag: str, limit: int = 0) -> Dict:
     payload = {"alias": alias, "tag": tag, "limit": limit}
     return send_request(sock_path, payload)
 
+
+def purge_results(sock_path: str, limit: int) -> Dict:
+    """Trim stored results to the latest ``limit`` entries."""
+    alias = "purge"
+    if not is_alias_approved(alias):
+        raise ValueError("Alias not approved")
+    payload = {"alias": alias, "limit": limit}
+    return send_request(sock_path, payload)
+

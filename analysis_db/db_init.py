@@ -73,12 +73,34 @@ def handle_search_results(tag: str, limit: int = 0) -> Dict:
     return {"status": "ok", "results": data}
 
 
-def start_db_server(db_dir: str, sock_path: str, once: bool = False, user: Optional[str] = None) -> None:
+def handle_purge(limit: int) -> Dict:
+    """Keep only the latest `limit` results."""
+    if limit <= 0:
+        return {"status": "error", "error": "invalid limit"}
+    data = load_results(DB_DIR)
+    if len(data) <= limit:
+        return {"status": "ok", "purged": 0}
+    data = data[-limit:]
+    path = os.path.join(DB_DIR, "results.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f)
+    os.chmod(path, 0o600)
+    return {"status": "ok", "purged": True}
+
+
+def start_db_server(
+    db_dir: str,
+    sock_path: str,
+    once: bool = False,
+    user: Optional[str] = None,
+) -> None:
     global DB_DIR
     DB_DIR = db_dir
     os.makedirs(DB_DIR, mode=0o700, exist_ok=True)
     os.umask(0o077)
     drop_privileges(user)
+
+    secret = os.getenv("MINC_IPC_SECRET")
 
     def handler(msg: Dict) -> Dict:
         alias = msg.get("alias")
@@ -98,9 +120,12 @@ def start_db_server(db_dir: str, sock_path: str, once: bool = False, user: Optio
             tag = msg.get("tag", "")
             limit = int(msg.get("limit", 0))
             return handle_search_results(tag, limit)
+        if alias == "purge":
+            limit = int(msg.get("limit", 0))
+            return handle_purge(limit)
         return {"status": "error", "error": "unknown alias"}
 
-    start_ipc_server(sock_path, handler, once)
+    start_ipc_server(sock_path, handler, once, secret)
 
 
 def main() -> None:

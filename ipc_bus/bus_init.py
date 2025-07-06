@@ -3,10 +3,15 @@
 import json
 import os
 import socket
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional
 
 
-def start_ipc_server(sock_path: str, handler: Callable[[Dict], Dict], once: bool = False) -> None:
+def start_ipc_server(
+    sock_path: str,
+    handler: Callable[[Dict], Dict],
+    once: bool = False,
+    secret: Optional[str] = None,
+) -> None:
     """Start a simple UNIX socket server.
 
     Parameters
@@ -36,7 +41,10 @@ def start_ipc_server(sock_path: str, handler: Callable[[Dict], Dict], once: bool
                 if not data:
                     continue
                 request = json.loads(data.decode())
-                response = handler(request)
+                if secret and request.get("secret") != secret:
+                    response = {"status": "error", "error": "unauthorized"}
+                else:
+                    response = handler(request)
                 try:
                     conn.sendall(json.dumps(response).encode())
                 except BrokenPipeError:

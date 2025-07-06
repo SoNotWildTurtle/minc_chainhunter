@@ -112,6 +112,12 @@ def save_notes(notes: List[Tuple[int, Dict]]) -> None:
         f.write('# notes:pcmeta-v1\n')
         f.write('# decode with: python3 dev_notes/notes_manager.py --show\n')
         for level, meta in notes:
+            meta_line = (
+                f"# NOTE id={meta['id']} ts={meta['ts']} "
+                f"tags={','.join(meta.get('tags', []))} "
+                f"personal={meta.get('personal', False)}\n"
+            )
+            f.write(meta_line)
             f.write(_encode_line(level, meta) + '\n')
 
 

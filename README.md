@@ -169,9 +169,10 @@ contains JSON metadata including an ID, timestamp, tags, personal flag,
 compression algorithm and optional `context` reference IDs. Older notes are
 automatically recompressed at higher levels using an algorithmic RLE+zlib
 scheme that scales with the distance from the viewed entry. Viewing a note
-adjusts compression for all entries and
-also decompresses any context notes so they are easy to read. Notes can be
-filtered by tag.
+adjusts compression for all entries and also decompresses any context notes
+so they are easy to read. Each stored entry is preceded by a `# NOTE` line
+listing its ID, timestamp and tags for quick reference. Notes can be filtered
+by tag.
 
 ```bash
 python3 cli/main.py notes add "Reminder to revisit sandbox perms"

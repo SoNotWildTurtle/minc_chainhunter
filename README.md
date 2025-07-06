@@ -122,6 +122,13 @@ environment variable. The server now drops privileges to the `nobody` user by
 default when started through the sandbox scripts, ensuring results are written
 with secure permissions.
 
+### Sandbox helpers
+
+The `sandbox/db_env/run_db.sh` script launches the database in an isolated
+network namespace. Set `MINC_DB_CHROOT` to a directory and the server will
+chroot into that path for extra protection. Use `sandbox/main_app/run_main.sh`
+to start the CLI, optionally dropping privileges by setting `MINC_CLI_USER`.
+
 ## Manager scripts
 
 Each major directory includes a small manager script to list or run its components. For example:

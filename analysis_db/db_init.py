@@ -89,11 +89,19 @@ def start_db_server(
     sock_path: str,
     once: bool = False,
     user: Optional[str] = None,
+    chroot_dir: Optional[str] = None,
 ) -> None:
+    """Start the analysis DB server with optional chroot isolation."""
     global DB_DIR
     DB_DIR = db_dir
-    os.makedirs(DB_DIR, mode=0o700, exist_ok=True)
     os.umask(0o077)
+    if chroot_dir and os.getuid() == 0:
+        try:
+            os.chroot(chroot_dir)
+            os.chdir("/")
+        except Exception:
+            pass
+    os.makedirs(DB_DIR, mode=0o700, exist_ok=True)
     drop_privileges(user)
 
     secret = os.getenv("MINC_IPC_SECRET")
@@ -133,9 +141,10 @@ def main() -> None:
     parser.add_argument("--db_dir", default="db_data")
     parser.add_argument("--socket", required=True)
     parser.add_argument("--user", help="Drop privileges to this user")
+    parser.add_argument("--chroot", help="Chroot directory for extra isolation")
     args = parser.parse_args()
 
-    start_db_server(args.db_dir, args.socket, user=args.user)
+    start_db_server(args.db_dir, args.socket, user=args.user, chroot_dir=args.chroot)
 
 
 if __name__ == "__main__":

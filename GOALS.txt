@@ -16,6 +16,7 @@
 - refine vulnerability modules with advanced options for bundled GitHub scanners
 - implement pipeline module for automated bug hunting
 - improve sandbox DB security with privilege dropping
+- add optional chroot isolation for analysis DB server
 - add extended bug hunting pipeline using multiple scanners
 - log individual module results in addition to pipeline summaries
 - create pipeline to scan git repositories for secrets using gitleaks and trufflehog

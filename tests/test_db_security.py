@@ -23,3 +23,5 @@ def test_db_file_permissions(tmp_path):
     path = db_dir / "results.json"
     mode = stat.S_IMODE(os.stat(path).st_mode)
     assert mode & 0o077 == 0  # no group/other perms
+
+

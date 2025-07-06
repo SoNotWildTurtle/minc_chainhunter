@@ -238,3 +238,13 @@ using the fetched results before printing the suggestion:
 ```bash
 python3 cli/main.py suggest -n 5
 ```
+
+## Auto-start service
+
+Run `scripts/install_service.sh` to install a systemd user service that keeps ChainHunter running in an `xterm` window. The script creates a Python virtual environment under `venv` and installs the service and hourly timer in `~/.config/systemd/user`.
+
+```bash
+./scripts/install_service.sh
+```
+
+The service restarts automatically and the timer checks every hour to ensure it remains active.

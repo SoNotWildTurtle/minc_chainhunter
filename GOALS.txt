@@ -42,6 +42,8 @@
 - encrypt database results when MINC_ENCRYPT_KEY is set
 - limit IPC message size to reduce DoS risk
 - expand neural analyzer to consider additional pipelines
+- create `smart_hunt` pipeline that selects a pipeline automatically using the
+  neural analyzer
 
 # Long-term goals
 - consolidate to a single version and retire version analyzer

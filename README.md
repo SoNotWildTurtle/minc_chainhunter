@@ -161,6 +161,17 @@ trufflehog:
 python3 cli/main.py run repo_hunt path/to/repo
 ```
 
+`smart_hunt` automatically chooses the best pipeline based on past results using
+the neural analyzer. It runs the recommended pipeline and logs the combined
+output:
+
+```bash
+python3 cli/main.py run smart_hunt example.com
+```
+
+Set the `MINC_OVERRIDE_PIPELINE` environment variable to force a specific
+pipeline when testing.
+
 When the environment variable `MINC_AUTO_REPORT` is set, the CLI automatically
 requests a report from the analysis database after any module finishes
 executing. Use `MINC_AUTO_REPORT_DIR` to change the output directory (defaults to

@@ -1,64 +1,22 @@
 # Short-term goals
-[G01] integrate CLI with IPC database server
-[G02] add command to generate reports from stored results
-[G03] create additional recon and vulnerability modules (dns lookup, xxe scanner)
-[G04] enhance sandboxing and security
-[G05] implement self-update mechanism via git pull
-[G06] add manager scripts for each directory
-[G07] implement progressive compression for dev notes
-[G08] add slider-based viewer that recompresses distant entries
-[G09] use algorithmic compression (RLE+zlib) instead of switching algorithms
-[G10] extend dev notes format with metadata and tag searching
-[G11] support context-aware viewing where referenced notes are decompressed
-[G12] provide CLI command to manage developer notes
-[G13] expose stored scan results via IPC for quick retrieval
-[G14] add ChatGPT-driven Q&A via 'chat' command
-[G15] integrate ChatGPT pipeline planning via new 'plan' command
-[G16] refine vulnerability modules with advanced options for bundled GitHub scanners
-[G17] implement pipeline module for automated bug hunting
-[G18] verify bug_hunt pipeline functions correctly and keep tests passing
-[G19] improve sandbox DB security with privilege dropping
-[G20] add optional chroot isolation for analysis DB server
-[G21] add extended bug hunting pipeline using multiple scanners
-[G22] log individual module results in addition to pipeline summaries
-[G23] create pipeline to scan git repositories for secrets using gitleaks and trufflehog
-[G24] verify DB handles approved aliases over IPC
-[G25] automate local cloning of scanner repositories when missing
-[G26] refine ChatGPT tagging for database results
-[G27] integrate repo_hunt pipeline with automatic reporting using MINC_AUTO_REPORT
-[G28] verify extended_hunt pipeline results and automate ChatGPT bug reports
-[G29] add recon modules for theHarvester and amass and verify installation
-[G30] add masscan and nmap modules for aggressive scanning
-[G31] parse open ports from masscan and nmap output for analysis
-[G32] add aquatone and git_dumper modules with repo installation
-[G33] add xsstrike module for XSS scanning and verify installation
-[G34] add sqlmap module for automated SQL injection exploitation
-[G35] integrate neural analyzer with CLI to recommend pipelines from stored results
-[G36] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity
-[G37] add 'self-evolve' CLI command to run Codex for automatic upgrades
-[G38] enhance neural analyzer using collected scan data for improved recommendations
-[G39] incorporate vulnerability counts and tags into neural analyzer features for smarter pipeline chaining
-[G40] extend 'self-evolve' to run bug hunting and self-healing routines for automatic security upgrades
-[G41] add self-heal command for standalone recovery
-[G42] install systemd service to keep ChainHunter running
-[G43] persist neural analyzer model to disk for consistent suggestions
-[G44] automatically retrain neural analyzer whenever new results are logged
-[G45] add CLI/IPC command to retrain the neural analyzer on demand
-[G46] allow searching stored results by tag via CLI
-[G47] add optional IPC secret and command to purge old DB entries
-[G48] encrypt database results when MINC_ENCRYPT_KEY is set
-[G49] limit IPC message size to reduce DoS risk
-[G50] expand neural analyzer to consider additional pipelines
-[G51] create `smart_hunt` pipeline that selects a pipeline automatically using the
-  neural analyzer
+[G52] implement plugin manager for third-party modules
+[G53] add automated scanning scheduler
+[G54] store raw request and response data in database
+[G55] export reports to PDF and JSON via CLI
+[G56] support concurrent multi-target scans
+[G57] add cross-platform integration tests
 
 # Long-term goals
-[L01] consolidate to a single version and retire version analyzer
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time
 [L03] increase sophistication of the neural network AI into a general cybersecurity intelligence with chatbot capabilities
+[L03a] incorporate CVE datasets to train neural analyzer
+[L03b] apply reinforcement learning from successful bug bounty cases
+[L03c] implement interactive chatbot over stored results
 [L04] continuously grow the vulnerability and recon modules catalogue to cover new tools and techniques
 [L05] maintain and improve sandbox isolation and security features as new threats arise
 [L06] automate end-to-end bug bounty workflows from scanning to report generation
+[L06a] auto-gather proof-of-concept artifacts
+[L06b] integrate with bug bounty report templates
 
 # Notes
 Always work on these goals alongside user prompts.

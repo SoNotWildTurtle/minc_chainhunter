@@ -292,6 +292,18 @@ using the fetched results before printing the suggestion:
 python3 cli/main.py suggest -n 5
 ```
 
+### Module recommendations
+
+After enough results are logged, the neural analyzer can also suggest the most
+useful modules to run next. It trains on each stored result and predicts which
+modules are likely to discover additional vulnerabilities.
+
+```bash
+python3 cli/main.py suggest-mods -n 5
+```
+
+The command prints a ranked list of module names.
+
 ### Chat with your results
 
 You can ask ChatGPT questions about previous scans. The database server will

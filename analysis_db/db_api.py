@@ -76,3 +76,12 @@ def train_model(sock_path: str) -> Dict:
     payload = {"alias": alias}
     return send_request(sock_path, payload)
 
+
+def suggest_modules_api(sock_path: str, limit: int = 5) -> Dict:
+    """Request module recommendations from the DB server."""
+    alias = "modules"
+    if not is_alias_approved(alias):
+        raise ValueError("Alias not approved")
+    payload = {"alias": alias, "limit": limit}
+    return send_request(sock_path, payload)
+

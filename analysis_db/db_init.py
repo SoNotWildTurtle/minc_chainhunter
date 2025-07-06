@@ -7,7 +7,11 @@ from typing import Dict, List, Optional
 from .chat_analyzer import analyze_result
 from .chatbot import answer_question, load_context
 from .report_gen import build_report, load_results, save_results
-from .neural_analyzer import update_model_from_results
+from .neural_analyzer import (
+    update_model_from_results,
+    update_module_model_from_results,
+    suggest_modules,
+)
 
 from ipc_bus.bus_init import start_ipc_server
 from ipc_bus.bus_integrity import is_alias_approved
@@ -104,9 +108,17 @@ def handle_train() -> Dict:
     results = load_results(DB_DIR)
     try:
         update_model_from_results(results)
+        update_module_model_from_results(results)
     except Exception:
         return {"status": "error", "error": "training failed"}
     return {"status": "ok"}
+
+
+def handle_modules(limit: int = 5) -> Dict:
+    results = load_context(DB_DIR, limit)
+    update_module_model_from_results(results)
+    modules = suggest_modules(results)
+    return {"status": "ok", "modules": modules}
 
 
 def start_db_server(
@@ -159,6 +171,9 @@ def start_db_server(
         if alias == "plan":
             limit = int(msg.get("limit", 5))
             return handle_plan(limit)
+        if alias == "modules":
+            limit = int(msg.get("limit", 5))
+            return handle_modules(limit)
         if alias == "train":
             return handle_train()
         return {"status": "error", "error": "unknown alias"}

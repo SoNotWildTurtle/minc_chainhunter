@@ -4,6 +4,8 @@ sys.path.insert(0, '.')
 from analysis_db.neural_analyzer import (
     suggest_pipeline,
     update_model_from_results,
+    suggest_modules,
+    update_module_model_from_results,
     save_model,
     load_model,
     MODEL_PATH,
@@ -52,3 +54,13 @@ def test_model_persistence(tmp_path):
     finally:
         if temp_model.is_file():
             temp_model.unlink()
+
+
+def test_suggest_modules():
+    stored = [
+        {"module": "ping_sweep", "ports": [80]},
+        {"module": "sqli_scanner", "ports": [80], "severity": "high"},
+    ]
+    update_module_model_from_results(stored)
+    mods = suggest_modules([{"ports": [80], "severity": "high"}])
+    assert mods

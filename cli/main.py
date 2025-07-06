@@ -118,6 +118,9 @@ def setup_argparse() -> argparse.ArgumentParser:
     suggest_parser = subparsers.add_parser('suggest', help='Suggest pipeline using neural analyzer')
     suggest_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
 
+    modules_parser = subparsers.add_parser('suggest-mods', help='Recommend modules to run next')
+    modules_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
+
     # Chat command
     chat_parser = subparsers.add_parser('chat', help='Ask ChatGPT about stored results')
     chat_parser.add_argument('question', help='Question to ask')
@@ -507,6 +510,16 @@ def main() -> int:
                 print(pipeline)
                 return 0
             print("[!] Failed to fetch results")
+            return 1
+        elif args.command == 'suggest-mods':
+            from analysis_db.db_api import get_results, suggest_modules_api
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = suggest_modules_api(sock, args.n)
+            if resp.get("status") == 'ok':
+                for m in resp.get('modules', []):
+                    print(m)
+                return 0
+            print("[!] Failed to get recommendations")
             return 1
         elif args.command == 'chat':
             from analysis_db.db_api import ask_question

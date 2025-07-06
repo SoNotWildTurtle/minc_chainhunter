@@ -67,3 +67,12 @@ def plan_pipeline(sock_path: str, limit: int = 5) -> Dict:
     payload = {"alias": alias, "limit": limit}
     return send_request(sock_path, payload)
 
+
+def train_model(sock_path: str) -> Dict:
+    """Trigger neural model retraining on the server."""
+    alias = "train"
+    if not is_alias_approved(alias):
+        raise ValueError("Alias not approved")
+    payload = {"alias": alias}
+    return send_request(sock_path, payload)
+

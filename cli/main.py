@@ -123,6 +123,9 @@ def setup_argparse() -> argparse.ArgumentParser:
     plan_parser = subparsers.add_parser('plan', help='Get ChatGPT pipeline recommendation')
     plan_parser.add_argument('-n', type=int, default=5, metavar='N', help='Number of recent results to include')
 
+    # Train command
+    train_parser = subparsers.add_parser('train', help='Retrain neural model from DB results')
+
     # Self-evolve command
     evolve_parser = subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
     evolve_parser.add_argument('--target', default='127.0.0.1', help='Target for bug hunt')
@@ -515,6 +518,15 @@ def main() -> int:
                 print(resp.get('plan'))
                 return 0
             print("[!] Failed to get plan")
+            return 1
+        elif args.command == 'train':
+            from analysis_db.db_api import train_model
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = train_model(sock)
+            if resp.get("status") == 'ok':
+                print("[+] Model retrained")
+                return 0
+            print("[!] Failed to retrain model")
             return 1
         elif args.command == 'notes':
             from dev_notes import notes_manager as nm

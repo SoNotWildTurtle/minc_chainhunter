@@ -9,5 +9,7 @@
     "purge",
     "chat",
     "plan"
+  ,
+    "train"
   ]
 }

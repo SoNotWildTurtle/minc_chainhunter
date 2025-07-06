@@ -99,6 +99,16 @@ def handle_plan(limit: int = 5) -> Dict:
     return {"status": "ok", "plan": plan}
 
 
+def handle_train() -> Dict:
+    """Retrain the neural model using stored results."""
+    results = load_results(DB_DIR)
+    try:
+        update_model_from_results(results)
+    except Exception:
+        return {"status": "error", "error": "training failed"}
+    return {"status": "ok"}
+
+
 def start_db_server(
     db_dir: str,
     sock_path: str,
@@ -149,6 +159,8 @@ def start_db_server(
         if alias == "plan":
             limit = int(msg.get("limit", 5))
             return handle_plan(limit)
+        if alias == "train":
+            return handle_train()
         return {"status": "error", "error": "unknown alias"}
 
     start_ipc_server(sock_path, handler, once, secret)

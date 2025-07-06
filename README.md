@@ -308,6 +308,14 @@ python3 cli/main.py plan -n 3
 ChatGPT will analyze the stored results and suggest a pipeline such as
 `bug_hunt`, `extended_hunt`, or `repo_hunt`.
 
+### Manually retrain the neural model
+
+You can trigger a retraining cycle for the neural analyzer using stored results:
+
+```bash
+python3 cli/main.py train
+```
+
 ## Auto-start service
 
 Run `scripts/install_service.sh` to install a systemd user service that keeps ChainHunter running in an `xterm` window. The script creates a Python virtual environment under `venv` and installs the service and hourly timer in `~/.config/systemd/user`.

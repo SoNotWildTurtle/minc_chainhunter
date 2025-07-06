@@ -7,6 +7,7 @@ from typing import Dict, List, Optional
 from .chat_analyzer import analyze_result
 from .chatbot import answer_question, load_context
 from .report_gen import build_report, load_results, save_results
+from .neural_analyzer import update_model_from_results
 
 from ipc_bus.bus_init import start_ipc_server
 from ipc_bus.bus_integrity import is_alias_approved
@@ -47,6 +48,11 @@ def handle_scan(result: Dict) -> Dict:
     result["vuln_count"] = _count_vulns(result)
     data.append(result)
     save_results(data, DB_DIR)
+    # Retrain neural model with the updated results
+    try:
+        update_model_from_results(data)
+    except Exception:
+        pass
     return {"status": "ok"}
 
 

@@ -259,9 +259,9 @@ stored results. It now looks at port counts, vulnerability totals and tags in
 addition to severity levels. The network starts with synthetic data but
 re-trains every time new pipeline results are logged, gradually improving its
 recommendation of whether to run the `bug_hunt`, `extended_hunt` or
-`repo_hunt` pipeline.
-The trained model is saved to `analysis_db/model.pkl` each time new results are
-incorporated so suggestions persist across runs.
+`repo_hunt` pipeline. The analysis database server automatically updates the
+model whenever a new result is saved. The trained model is stored at
+`analysis_db/model.pkl` so suggestions persist across runs.
 
 ```python
 from analysis_db.neural_analyzer import suggest_pipeline

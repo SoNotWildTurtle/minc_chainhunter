@@ -49,3 +49,12 @@ def purge_results(sock_path: str, limit: int) -> Dict:
     payload = {"alias": alias, "limit": limit}
     return send_request(sock_path, payload)
 
+
+def ask_question(sock_path: str, question: str, limit: int = 5) -> Dict:
+    """Ask ChatGPT a question about stored results."""
+    alias = "chat"
+    if not is_alias_approved(alias):
+        raise ValueError("Alias not approved")
+    payload = {"alias": alias, "question": question, "limit": limit}
+    return send_request(sock_path, payload)
+

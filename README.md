@@ -267,6 +267,17 @@ using the fetched results before printing the suggestion:
 python3 cli/main.py suggest -n 5
 ```
 
+### Chat with your results
+
+You can ask ChatGPT questions about previous scans. The database server will
+provide recent results as context and return an answer:
+
+```bash
+python3 cli/main.py chat "How severe are the latest findings?" -n 3
+```
+
+Set `OPENAI_API_KEY` to enable this feature.
+
 ## Auto-start service
 
 Run `scripts/install_service.sh` to install a systemd user service that keeps ChainHunter running in an `xterm` window. The script creates a Python virtual environment under `venv` and installs the service and hourly timer in `~/.config/systemd/user`.

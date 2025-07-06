@@ -5,6 +5,7 @@ import pwd
 from typing import Dict, List, Optional
 
 from .chat_analyzer import analyze_result
+from .chatbot import answer_question, load_context
 from .report_gen import build_report, load_results, save_results
 
 from ipc_bus.bus_init import start_ipc_server
@@ -76,6 +77,13 @@ def handle_purge(limit: int) -> Dict:
     return {"status": "ok", "purged": True}
 
 
+def handle_chat(question: str, limit: int = 5) -> Dict:
+    """Return a ChatGPT answer using recent results for context."""
+    results = load_context(DB_DIR, limit)
+    answer = answer_question(question, results)
+    return {"status": "ok", "answer": answer}
+
+
 def start_db_server(
     db_dir: str,
     sock_path: str,
@@ -111,6 +119,10 @@ def start_db_server(
         if alias == "purge":
             limit = int(msg.get("limit", 0))
             return handle_purge(limit)
+        if alias == "chat":
+            question = msg.get("question", "")
+            limit = int(msg.get("limit", 5))
+            return handle_chat(question, limit)
         return {"status": "error", "error": "unknown alias"}
 
     start_ipc_server(sock_path, handler, once, secret)

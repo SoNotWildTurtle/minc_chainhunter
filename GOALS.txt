@@ -12,6 +12,7 @@
 - support context-aware viewing where referenced notes are decompressed
 - provide CLI command to manage developer notes
 - expose stored scan results via IPC for quick retrieval
+- add ChatGPT-driven Q&A via 'chat' command
 - refine vulnerability modules with advanced options for bundled GitHub scanners
 - implement pipeline module for automated bug hunting
 - improve sandbox DB security with privilege dropping

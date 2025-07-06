@@ -114,6 +114,11 @@ def setup_argparse() -> argparse.ArgumentParser:
     suggest_parser = subparsers.add_parser('suggest', help='Suggest pipeline using neural analyzer')
     suggest_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
 
+    # Chat command
+    chat_parser = subparsers.add_parser('chat', help='Ask ChatGPT about stored results')
+    chat_parser.add_argument('question', help='Question to ask')
+    chat_parser.add_argument('-n', type=int, default=5, metavar='N', help='Number of recent results to include')
+
     # Self-evolve command
     evolve_parser = subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
     evolve_parser.add_argument('--target', default='127.0.0.1', help='Target for bug hunt')
@@ -488,6 +493,15 @@ def main() -> int:
                 print(pipeline)
                 return 0
             print("[!] Failed to fetch results")
+            return 1
+        elif args.command == 'chat':
+            from analysis_db.db_api import ask_question
+            sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+            resp = ask_question(sock, args.question, args.n)
+            if resp.get("status") == 'ok':
+                print(resp.get('answer'))
+                return 0
+            print("[!] Failed to get answer")
             return 1
         elif args.command == 'notes':
             from dev_notes import notes_manager as nm

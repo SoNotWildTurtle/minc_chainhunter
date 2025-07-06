@@ -50,6 +50,14 @@ def test_db_alias_commands(tmp_path):
     assert resp["status"] == "ok"
     assert os.path.isfile(resp["path"])
 
+    # chat alias should respond
+    t = threading.Thread(target=start_db_server, args=(str(db_dir), str(sock), True))
+    t.start()
+    time.sleep(0.1)
+    resp = send_request(str(sock), {"alias": "chat", "question": "hi"})
+    t.join()
+    assert resp["status"] == "ok"
+
     # unapproved alias should fail
     t = threading.Thread(target=start_db_server, args=(str(db_dir), str(sock), True))
     t.start()

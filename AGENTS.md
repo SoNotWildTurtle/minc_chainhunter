@@ -7,5 +7,6 @@ This project uses automated goals and compressed developer notes to coordinate d
 - Before sending a pull request or when beginning work, read both the goals and the decompressed notes to understand current priorities.
 - After modifying code, always run `pytest -q` to ensure all tests pass.
 - Follow basic Python style: 4-space indents and descriptive names. Avoid trailing whitespace.
+- AI agents should provide additive and creative contributions without deleting useful history or code.
 
 These instructions apply repository-wide.

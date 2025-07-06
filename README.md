@@ -331,3 +331,15 @@ Run `scripts/install_service.sh` to install a systemd user service that keeps Ch
 ```
 
 The service restarts automatically and the timer checks every hour to ensure it remains active.
+
+## Plugin manager
+
+Third-party modules can be installed using the plugin manager. Plugins are stored under `plugins/installed` by default and are automatically discovered by the CLI.
+
+```bash
+python3 plugins/plugin_manager.py list
+python3 plugins/plugin_manager.py install /path/to/plugin
+```
+
+Set `CHAINHUNTER_PLUGIN_DIR` to override the default plugin directory.
+

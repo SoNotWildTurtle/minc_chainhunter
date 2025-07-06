@@ -38,7 +38,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-MODULE_DIRS = ["../recon_modules", "../vuln_modules", "../pipelines"]
+PLUGIN_DIR = os.environ.get(
+    'CHAINHUNTER_PLUGIN_DIR',
+    os.path.join(os.path.dirname(__file__), '..', 'plugins', 'installed')
+)
+MODULE_DIRS = ["../recon_modules", "../vuln_modules", "../pipelines", PLUGIN_DIR]
 MODULES: Dict[str, str] = {}
 VERSION = "1.0.0"
 
@@ -166,14 +170,17 @@ def discover_modules() -> Dict[str, str]:
                 continue
                 
             # Find all Python files in the directory
-            py_files = glob.glob(os.path.join(abs_dir, "*.py"))
+            py_files = glob.glob(os.path.join(abs_dir, "**", "*.py"), recursive=True)
             for pf in py_files:
                 if pf.endswith("__init__.py"):
                     continue
                 name = os.path.splitext(os.path.basename(pf))[0]
+                mod_type = 'recon'
+                if 'vuln' in pf or 'vuln' in name:
+                    mod_type = 'vuln'
                 modules[name] = {
                     'path': pf,
-                    'type': 'recon' if 'recon_modules' in pf else 'vuln',
+                    'type': mod_type,
                     'module': None  # Will be lazy-loaded when needed
                 }
                 logger.debug(f"Discovered module: {name} at {pf}")

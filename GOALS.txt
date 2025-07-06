@@ -1,5 +1,5 @@
 # Short-term goals
-[G52] implement plugin manager for third-party modules
+[G52] implement plugin manager for third-party modules (basic install/list done)
 [G53] add automated scanning scheduler
 [G54] store raw request and response data in database
 [G55] export reports to PDF and JSON via CLI

@@ -2,6 +2,12 @@
 
 MINC ChainHunter is an experimental security toolkit featuring a CLI interface and modular architecture. Modules are loaded dynamically from `recon_modules/` and `vuln_modules/`.
 
+## Goals tracking
+
+Development objectives are listed in `GOALS.txt`. Each short‑term item is
+prefixed with `[GXX]` and long‑term goals use `[LXX]` so developer notes can
+reference them with `goal:GXX` tags.
+
 ## Dependencies
 
 Install the following Python packages:

@@ -1,0 +1,23 @@
+# Short-term goals
+[G52] implement plugin manager for third-party modules (basic install/list done)
+[G53] add automated scanning scheduler (basic script done)
+[G54] store raw request and response data in database
+[G55] export reports to PDF and JSON via CLI (done)
+[G56] support concurrent multi-target scans (done)
+[G57] add cross-platform integration tests
+[G58] recommend next modules using neural analyzer
+
+# Long-term goals
+[L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time
+[L03] increase sophistication of the neural network AI into a general cybersecurity intelligence with chatbot capabilities
+[L03a] incorporate CVE datasets to train neural analyzer
+[L03b] apply reinforcement learning from successful bug bounty cases
+[L03c] implement interactive chatbot over stored results
+[L04] continuously grow the vulnerability and recon modules catalogue to cover new tools and techniques
+[L05] maintain and improve sandbox isolation and security features as new threats arise
+[L06] automate end-to-end bug bounty workflows from scanning to report generation
+[L06a] auto-gather proof-of-concept artifacts
+[L06b] integrate with bug bounty report templates
+
+# Notes
+Always work on these goals alongside user prompts.

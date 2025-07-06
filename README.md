@@ -194,9 +194,10 @@ The script prints a summary for each commit analyzed and suggests the most featu
 
 ## Neural pipeline suggestion
 
-`analysis_db/neural_analyzer.py` contains a tiny neural network trained on synthetic
-data. It inspects previous scan results and recommends whether to run the
-`bug_hunt` or `extended_hunt` pipeline.
+`analysis_db/neural_analyzer.py` contains a small neural network. It starts with
+synthetic training data but automatically retrains using any pipeline results
+stored in the analysis database. Over time this improves the recommendation of
+whether to run the `bug_hunt` or `extended_hunt` pipeline.
 
 ```python
 from analysis_db.neural_analyzer import suggest_pipeline

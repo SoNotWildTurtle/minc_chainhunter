@@ -427,11 +427,16 @@ def main() -> int:
             return 1
         elif args.command == 'suggest':
             from analysis_db.db_api import get_results
-            from analysis_db.neural_analyzer import suggest_pipeline
+            from analysis_db.neural_analyzer import (
+                suggest_pipeline,
+                update_model_from_results,
+            )
             sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
             resp = get_results(sock, args.n)
             if resp.get("status") == "ok":
-                pipeline = suggest_pipeline(resp.get("results", []))
+                results = resp.get("results", [])
+                update_model_from_results(results)
+                pipeline = suggest_pipeline(results)
                 print(pipeline)
                 return 0
             print("[!] Failed to fetch results")

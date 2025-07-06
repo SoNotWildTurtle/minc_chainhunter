@@ -84,6 +84,15 @@ def handle_chat(question: str, limit: int = 5) -> Dict:
     return {"status": "ok", "answer": answer}
 
 
+def handle_plan(limit: int = 5) -> Dict:
+    """Return a ChatGPT pipeline recommendation."""
+    results = load_context(DB_DIR, limit)
+    from .chatbot import recommend_pipeline
+
+    plan = recommend_pipeline(results)
+    return {"status": "ok", "plan": plan}
+
+
 def start_db_server(
     db_dir: str,
     sock_path: str,
@@ -131,6 +140,9 @@ def start_db_server(
             question = msg.get("question", "")
             limit = int(msg.get("limit", 5))
             return handle_chat(question, limit)
+        if alias == "plan":
+            limit = int(msg.get("limit", 5))
+            return handle_plan(limit)
         return {"status": "error", "error": "unknown alias"}
 
     start_ipc_server(sock_path, handler, once, secret)

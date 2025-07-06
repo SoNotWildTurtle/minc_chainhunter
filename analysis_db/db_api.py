@@ -58,3 +58,12 @@ def ask_question(sock_path: str, question: str, limit: int = 5) -> Dict:
     payload = {"alias": alias, "question": question, "limit": limit}
     return send_request(sock_path, payload)
 
+
+def plan_pipeline(sock_path: str, limit: int = 5) -> Dict:
+    """Ask ChatGPT for a pipeline recommendation."""
+    alias = "plan"
+    if not is_alias_approved(alias):
+        raise ValueError("Alias not approved")
+    payload = {"alias": alias, "limit": limit}
+    return send_request(sock_path, payload)
+

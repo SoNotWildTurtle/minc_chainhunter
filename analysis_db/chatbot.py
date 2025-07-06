@@ -43,3 +43,31 @@ def load_context(db_dir: str, limit: int = 5) -> List[Dict]:
     if limit > 0:
         data = data[-limit:]
     return data
+
+
+def recommend_pipeline(results: List[Dict]) -> str:
+    """Return a recommended pipeline using ChatGPT if available."""
+    try:
+        import openai  # type: ignore
+    except Exception:
+        return "ChatGPT unavailable"
+
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        return "OPENAI_API_KEY not set"
+
+    openai.api_key = api_key
+    prompt = (
+        "Given these scan results, recommend the best ChainHunter pipeline to run "
+        "next.\nOptions: bug_hunt, extended_hunt, repo_hunt, smart_hunt.\n" +
+        json.dumps(results)
+    )
+    try:
+        resp = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=100,
+        )
+        return resp["choices"][0]["message"]["content"].strip()
+    except Exception as e:  # pragma: no cover - network
+        return f"failed: {e}"

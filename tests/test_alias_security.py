@@ -12,4 +12,5 @@ def test_alias_is_approved():
     assert bi.is_alias_approved("results")
     assert bi.is_alias_approved("search")
     assert bi.is_alias_approved("chat")
+    assert bi.is_alias_approved("plan")
     assert not bi.is_alias_approved("rm -rf")

@@ -297,6 +297,17 @@ python3 cli/main.py chat "How severe are the latest findings?" -n 3
 
 Set `OPENAI_API_KEY` to enable this feature.
 
+### Chat-driven pipeline planning
+
+Ask ChatGPT which pipeline to run next based on recent results:
+
+```bash
+python3 cli/main.py plan -n 3
+```
+
+ChatGPT will analyze the stored results and suggest a pipeline such as
+`bug_hunt`, `extended_hunt`, or `repo_hunt`.
+
 ## Auto-start service
 
 Run `scripts/install_service.sh` to install a systemd user service that keeps ChainHunter running in an `xterm` window. The script creates a Python virtual environment under `venv` and installs the service and hourly timer in `~/.config/systemd/user`.

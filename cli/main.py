@@ -113,6 +113,9 @@ def setup_argparse() -> argparse.ArgumentParser:
     evolve_parser.add_argument('--target', default='127.0.0.1', help='Target for bug hunt')
     evolve_parser.add_argument('--heal', action='store_true', help='Run self-healing tests')
 
+    # Self-heal command
+    heal_parser = subparsers.add_parser('self-heal', help='Run self-healing routine')
+
     # Notes command
     notes_parser = subparsers.add_parser('notes', help='Manage developer notes')
     notes_sub = notes_parser.add_subparsers(dest='notes_cmd', required=True)
@@ -484,6 +487,10 @@ def main() -> int:
         elif args.command == 'self-evolve':
             from scripts.self_evolve import run_self_evolve
             ok = run_self_evolve(target=args.target, heal=args.heal)
+            return 0 if ok else 1
+        elif args.command == 'self-heal':
+            from scripts.self_heal import run_self_heal
+            ok = run_self_heal()
             return 0 if ok else 1
             
     except KeyboardInterrupt:

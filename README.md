@@ -169,6 +169,17 @@ When invoked, ChainHunter runs a quick `bug_hunt` scan against the chosen
 target. Use `--heal` to reinstall local scanner repositories and execute the
 test suite for a self-healing security upgrade.
 
+### Self-healing only
+
+Run the dedicated self-healing routine without invoking Codex:
+
+```bash
+python3 cli/main.py self-heal
+```
+
+This command reinstalls scanner repositories (with `SKIP_CLONE=1`) and runs the
+test suite to verify database integrity and module functionality.
+
 ## Developer notes
 
 Development notes are stored in a compressed format inside `DEV_NOTES.dat`.

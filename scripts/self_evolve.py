@@ -5,6 +5,8 @@ import sys
 import subprocess
 from pathlib import Path
 
+from .self_heal import run_self_heal
+
 
 def _run_bug_hunt(target: str, repo: Path) -> None:
     """Run a lightweight bug hunting pipeline."""
@@ -17,17 +19,6 @@ def _run_bug_hunt(target: str, repo: Path) -> None:
     ], cwd=repo, check=False)
 
 
-def _self_heal(repo: Path) -> bool:
-    """Reinstall scanners and run tests."""
-    env = os.environ.copy()
-    env["SKIP_CLONE"] = "1"
-    subprocess.run(["bash", "scripts/install_scanner_repos.sh"], cwd=repo, env=env, check=False)
-    try:
-        subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=repo, check=True)
-        return True
-    except subprocess.CalledProcessError:
-        print("[!] Self-heal tests failed")
-        return False
 
 
 def run_self_evolve(repo_dir: str | None = None, target: str = "127.0.0.1", heal: bool = False) -> bool:
@@ -52,7 +43,7 @@ def run_self_evolve(repo_dir: str | None = None, target: str = "127.0.0.1", heal
 
     if heal:
         print("[*] Performing self-healing routine")
-        return _self_heal(repo)
+        return run_self_heal(str(repo))
     return True
 
 

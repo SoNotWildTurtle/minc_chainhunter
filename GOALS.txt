@@ -36,3 +36,4 @@
 - enhance neural analyzer using collected scan data for improved recommendations
 - document numpy and scikit-learn as dependencies
 - extend 'self-evolve' to run bug hunting and self-healing routines for automatic security upgrades
+- add self-heal command for standalone recovery

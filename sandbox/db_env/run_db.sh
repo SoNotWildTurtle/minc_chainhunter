@@ -5,6 +5,7 @@
 DB_DIR="/opt/minc_chainhunter/db_data"
 SOCKET_PATH="/opt/minc_chainhunter/sandbox/db_env/secure_ipc.sock"
 DB_EXEC="/opt/minc_chainhunter/analysis_db/db_init.py"
+DB_USER="nobody"
 NET_NS="minc_db_ns"
 
 # Ensure DB directory exists
@@ -23,6 +24,6 @@ ip netns exec "${NET_NS}" ip link set lo up
 
 # Launch DB mimic in the network namespace, accessible only by secure UNIX socket
 ip netns exec "${NET_NS}" \
-  python3 "${DB_EXEC}" --db_dir "${DB_DIR}" --socket "${SOCKET_PATH}" &
+  python3 "${DB_EXEC}" --db_dir "${DB_DIR}" --socket "${SOCKET_PATH}" --user "${DB_USER}" &
 
 echo "MongoDB mimic launched in sandboxed netns (${NET_NS}) with IPC at ${SOCKET_PATH}"

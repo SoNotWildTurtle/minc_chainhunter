@@ -109,7 +109,9 @@ def setup_argparse() -> argparse.ArgumentParser:
     suggest_parser.add_argument('-n', type=int, default=5, metavar='N', help='Analyze the last N results')
 
     # Self-evolve command
-    subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
+    evolve_parser = subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
+    evolve_parser.add_argument('--target', default='127.0.0.1', help='Target for bug hunt')
+    evolve_parser.add_argument('--heal', action='store_true', help='Run self-healing tests')
 
     # Notes command
     notes_parser = subparsers.add_parser('notes', help='Manage developer notes')
@@ -481,7 +483,7 @@ def main() -> int:
                 return 0
         elif args.command == 'self-evolve':
             from scripts.self_evolve import run_self_evolve
-            ok = run_self_evolve()
+            ok = run_self_evolve(target=args.target, heal=args.heal)
             return 0 if ok else 1
             
     except KeyboardInterrupt:

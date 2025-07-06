@@ -32,3 +32,5 @@
 - develop comprehensive self-healing tests to reinstall scanners and validate DB integrity
 - consolidate to a single version and retire version analyzer
 - add 'self-evolve' CLI command to run Codex for automatic upgrades
+- enhance neural analyzer using collected scan data for improved recommendations
+- document numpy and scikit-learn as dependencies

@@ -2,6 +2,11 @@
 
 MINC ChainHunter is an experimental security toolkit featuring a CLI interface and modular architecture. Modules are loaded dynamically from `recon_modules/` and `vuln_modules/`.
 
+## Dependencies
+
+Install `numpy` and `scikit-learn` for the neural analyzer: `pip install numpy scikit-learn`
+
+
 ## Usage
 
 ```

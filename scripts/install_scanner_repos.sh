@@ -35,5 +35,6 @@ install_repo nmap https://github.com/nmap/nmap.git
 install_repo git_dumper https://github.com/arthaud/git-dumper.git
 install_repo aquatone https://github.com/michenriksen/aquatone.git
 install_repo xsstrike https://github.com/s0md3v/XSStrike.git
+install_repo sqlmap https://github.com/sqlmapproject/sqlmap.git
 
 echo "[+] Scanner repositories installed"

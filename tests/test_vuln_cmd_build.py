@@ -11,6 +11,7 @@ import vuln_modules.trufflehog_scan as th
 import vuln_modules.nmap_scan as nm
 import vuln_modules.git_dumper_scan as gd
 import vuln_modules.xsstrike_scan as xs
+import vuln_modules.sqlmap_scan as sql
 
 
 def test_dirsearch_cmd_build():
@@ -80,3 +81,12 @@ def test_xsstrike_cmd_build():
     assert cmd[:2] == ["bash", script]
     assert "-u" in cmd and cmd[cmd.index("-u") + 1] == "http://victim"
     assert "--crawl" in cmd
+
+
+def test_sqlmap_cmd_build():
+    cmd = sql.build_sqlmap_cmd("http://victim", options="--batch")
+    script = os.path.join(os.path.dirname(sql.__file__), "..", "github_scanners", "sqlmap", "run.sh")
+    assert cmd[:2] == ["bash", script]
+    assert "-u" in cmd and cmd[cmd.index("-u") + 1] == "http://victim"
+    assert "--batch" in cmd
+

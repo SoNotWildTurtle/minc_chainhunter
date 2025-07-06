@@ -46,6 +46,7 @@ Example modules include:
 - `git_dumper_scan` – dump exposed `.git` directories.
  - `xxe_scan` – sends an XML payload to detect XXE vulnerabilities.
 - `xsstrike_scan` – detect reflected XSS vulnerabilities using XSStrike.
+- `sqlmap_scan` – run sqlmap for automated SQL injection exploitation.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
 - `extended_hunt` – run several scanners (subfinder, hakrawler, dirsearch,

@@ -4,17 +4,52 @@ import json
 import os
 from datetime import datetime
 from typing import List, Dict
+from cryptography.fernet import Fernet
+
+
+def _get_cipher() -> Fernet | None:
+    key = os.getenv("MINC_ENCRYPT_KEY")
+    if not key:
+        return None
+    try:
+        return Fernet(key.encode())
+    except Exception:
+        return None
 
 
 def load_results(db_dir: str) -> List[Dict]:
     path = os.path.join(db_dir, "results.json")
     if not os.path.isfile(path):
         return []
+    cipher = _get_cipher()
+    if cipher:
+        try:
+            with open(path, "rb") as f:
+                data = f.read()
+            decrypted = cipher.decrypt(data)
+            return json.loads(decrypted.decode())
+        except Exception:
+            return []
     with open(path, "r", encoding="utf-8") as f:
         try:
             return json.load(f)
         except json.JSONDecodeError:
             return []
+
+
+def save_results(results: List[Dict], db_dir: str) -> None:
+    path = os.path.join(db_dir, "results.json")
+    cipher = _get_cipher()
+    os.makedirs(db_dir, exist_ok=True)
+    if cipher:
+        data = json.dumps(results).encode()
+        enc = cipher.encrypt(data)
+        with open(path, "wb") as f:
+            f.write(enc)
+    else:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(results, f)
+    os.chmod(path, 0o600)
 
 
 def build_report(results: List[Dict], out_dir: str) -> str:

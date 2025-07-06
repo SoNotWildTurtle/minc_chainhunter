@@ -16,7 +16,7 @@ def test_suggest_pipeline():
         {"severity": "high", "ports": [22, 8080, 3306]},
     ]
     pipeline = suggest_pipeline(results)
-    assert pipeline in {"bug_hunt", "extended_hunt"}
+    assert pipeline in {"bug_hunt", "extended_hunt", "repo_hunt"}
 
 
 def test_update_model_from_results():
@@ -26,16 +26,18 @@ def test_update_model_from_results():
             "module": "extended_hunt",
             "steps": [{"ports": [22, 80], "severity": "high"}],
         },
+        {"module": "repo_hunt", "tags": ["secrets"], "ports": []},
     ]
     update_model_from_results(stored)
     pred = suggest_pipeline([{"ports": [22, 80], "severity": "high"}])
-    assert pred in {"bug_hunt", "extended_hunt"}
+    assert pred in {"bug_hunt", "extended_hunt", "repo_hunt"}
 
 
 def test_model_persistence(tmp_path):
     stored = [
         {"module": "bug_hunt", "ports": [80]},
         {"module": "extended_hunt", "ports": [22], "severity": "high"},
+        {"module": "repo_hunt", "tags": ["secrets"]},
     ]
     temp_model = tmp_path / "model.pkl"
     try:
@@ -46,7 +48,7 @@ def test_model_persistence(tmp_path):
         # load back
         load_model(temp_model)
         pred = suggest_pipeline([{"ports": [22], "severity": "high"}])
-        assert pred in {"bug_hunt", "extended_hunt"}
+        assert pred in {"bug_hunt", "extended_hunt", "repo_hunt"}
     finally:
         if temp_model.is_file():
             temp_model.unlink()

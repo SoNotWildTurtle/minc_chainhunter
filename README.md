@@ -4,7 +4,14 @@ MINC ChainHunter is an experimental security toolkit featuring a CLI interface a
 
 ## Dependencies
 
-Install `numpy` and `scikit-learn` for the neural analyzer: `pip install numpy scikit-learn`
+Install the following Python packages:
+
+- `numpy` and `scikit-learn` for the neural analyzer
+- `cryptography` if you enable database encryption
+
+```
+pip install numpy scikit-learn cryptography
+```
 
 
 ## Usage
@@ -90,11 +97,14 @@ When a module returns a structured result, ChainHunter sends it over the IPC bus
 to the sandboxed analysis database. Results are written to JSON files and, if an
 OpenAI API key is configured, processed by ChatGPT for tagging and a short
 summary. Reports are stored in `db_data/results.json`.
-Set `MINC_IPC_SECRET` to require a shared secret for all IPC requests.
-Clients automatically include this value and the server rejects requests with an
-incorrect secret.
+Set `MINC_IPC_SECRET` to require a shared secret for all IPC requests. Clients
+automatically include this value and the server rejects requests with an
+incorrect secret. You can also set `MINC_ENCRYPT_KEY` to a Fernet key to store
+the database encrypted on disk. Generate a key with
+`python -m cryptography.fernet.Fernet.generate_key`.
 Modules run outside the CLI also perform this logging automatically whenever
-`MINC_DB_SOCKET` is defined.
+`MINC_DB_SOCKET` is defined. Results are transparently decrypted when accessed
+through the CLI or report generator.
 
 To filter by tag, run `python3 cli/main.py results --tag <label>`.
 
@@ -229,7 +239,8 @@ The script prints a summary for each commit analyzed and suggests the most featu
 stored results. It now looks at port counts, vulnerability totals and tags in
 addition to severity levels. The network starts with synthetic data but
 re-trains every time new pipeline results are logged, gradually improving its
-recommendation of whether to run the `bug_hunt` or `extended_hunt` pipeline.
+recommendation of whether to run the `bug_hunt`, `extended_hunt` or
+`repo_hunt` pipeline.
 The trained model is saved to `analysis_db/model.pkl` each time new results are
 incorporated so suggestions persist across runs.
 

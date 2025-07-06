@@ -11,8 +11,8 @@ from sklearn.neural_network import MLPClassifier
 
 
 # Pre-trained on synthetic data representing port counts, high severity, and
-# vulnerability totals. 0 -> bug_hunt, 1 -> extended_hunt
-_MODEL = MLPClassifier(hidden_layer_sizes=(6,), random_state=42, max_iter=500)
+# vulnerability totals.
+_MODEL = MLPClassifier(hidden_layer_sizes=(8,), random_state=42, max_iter=500)
 _X = np.array([
     [0, 0, 0, 0],
     [1, 0, 1, 0],
@@ -20,8 +20,10 @@ _X = np.array([
     [3, 1, 2, 2],
     [5, 2, 3, 3],
     [7, 3, 4, 4],
+    [1, 0, 0, 1],
+    [4, 1, 1, 3],
 ])
-_y = np.array([0, 0, 0, 1, 1, 1])
+_y = np.array([0, 0, 0, 1, 1, 1, 2, 2])
 _MODEL.fit(_X, _y)
 
 MODEL_PATH = Path(__file__).with_name("model.pkl")
@@ -68,16 +70,21 @@ def update_model_from_results(results: List[Dict]) -> None:
     y = []
     for r in results:
         module = r.get("module")
-        if module not in {"bug_hunt", "extended_hunt"}:
+        if module not in {"bug_hunt", "extended_hunt", "repo_hunt"}:
             continue
         X.append(_extract_features(r))
-        y.append(0 if module == "bug_hunt" else 1)
+        if module == "bug_hunt":
+            y.append(0)
+        elif module == "extended_hunt":
+            y.append(1)
+        else:
+            y.append(2)
     if not X:
         return
     X_arr = np.array(X)
     y_arr = np.array(y)
     if not hasattr(_MODEL, "classes_"):
-        _MODEL.partial_fit(X_arr, y_arr, classes=np.array([0, 1]))
+        _MODEL.partial_fit(X_arr, y_arr, classes=np.array([0, 1, 2]))
     else:
         _MODEL.partial_fit(X_arr, y_arr)
     save_model()
@@ -90,4 +97,8 @@ def suggest_pipeline(results: List[Dict]) -> str:
     vulns = sum(len(r.get("vulnerabilities", [])) for r in results)
     tags = sum(len(r.get("tags", [])) for r in results)
     pred = _MODEL.predict(np.array([[ports, high, vulns, tags]]))[0]
-    return "extended_hunt" if pred else "bug_hunt"
+    if pred == 0:
+        return "bug_hunt"
+    if pred == 1:
+        return "extended_hunt"
+    return "repo_hunt"

@@ -5,7 +5,7 @@ import pwd
 from typing import Dict, List, Optional
 
 from .chat_analyzer import analyze_result
-from .report_gen import build_report, load_results
+from .report_gen import build_report, load_results, save_results
 
 from ipc_bus.bus_init import start_ipc_server
 from ipc_bus.bus_integrity import is_alias_approved
@@ -34,14 +34,7 @@ def _count_vulns(entry: Dict) -> int:
 
 
 def handle_scan(result: Dict) -> Dict:
-    path = os.path.join(DB_DIR, "results.json")
-    data = []
-    if os.path.isfile(path):
-        with open(path, "r", encoding="utf-8") as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                data = []
+    data = load_results(DB_DIR)
     analysis = analyze_result(result)
     if analysis.get("tags"):
         tags = result.get("tags", []).copy()
@@ -52,9 +45,7 @@ def handle_scan(result: Dict) -> Dict:
     result["summary"] = analysis.get("summary")
     result["vuln_count"] = _count_vulns(result)
     data.append(result)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f)
-    os.chmod(path, 0o600)
+    save_results(data, DB_DIR)
     return {"status": "ok"}
 
 
@@ -81,10 +72,7 @@ def handle_purge(limit: int) -> Dict:
     if len(data) <= limit:
         return {"status": "ok", "purged": 0}
     data = data[-limit:]
-    path = os.path.join(DB_DIR, "results.json")
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f)
-    os.chmod(path, 0o600)
+    save_results(data, DB_DIR)
     return {"status": "ok", "purged": True}
 
 

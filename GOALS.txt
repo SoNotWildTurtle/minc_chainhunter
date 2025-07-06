@@ -43,3 +43,6 @@
 - persist neural analyzer model to disk for consistent suggestions
 - allow searching stored results by tag via CLI
 - add optional IPC secret and command to purge old DB entries
+- encrypt database results when MINC_ENCRYPT_KEY is set
+- limit IPC message size to reduce DoS risk
+- expand neural analyzer to consider additional pipelines

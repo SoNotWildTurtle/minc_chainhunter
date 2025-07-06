@@ -11,6 +11,7 @@ def start_ipc_server(
     handler: Callable[[Dict], Dict],
     once: bool = False,
     secret: Optional[str] = None,
+    max_size: int = 65536,
 ) -> None:
     """Start a simple UNIX socket server.
 
@@ -38,13 +39,18 @@ def start_ipc_server(
                     if not chunk:
                         break
                     data += chunk
+                    if len(data) > max_size:
+                        break
                 if not data:
                     continue
-                request = json.loads(data.decode())
-                if secret and request.get("secret") != secret:
-                    response = {"status": "error", "error": "unauthorized"}
+                if len(data) > max_size:
+                    response = {"status": "error", "error": "request too large"}
                 else:
-                    response = handler(request)
+                    request = json.loads(data.decode())
+                    if secret and request.get("secret") != secret:
+                        response = {"status": "error", "error": "unauthorized"}
+                    else:
+                        response = handler(request)
                 try:
                     conn.sendall(json.dumps(response).encode())
                 except BrokenPipeError:

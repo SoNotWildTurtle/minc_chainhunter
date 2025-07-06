@@ -111,6 +111,25 @@ def setup_argparse() -> argparse.ArgumentParser:
     # Self-evolve command
     subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
 
+    # Notes command
+    notes_parser = subparsers.add_parser('notes', help='Manage developer notes')
+    notes_sub = notes_parser.add_subparsers(dest='notes_cmd', required=True)
+
+    add_p = notes_sub.add_parser('add', help='Add a note')
+    add_p.add_argument('text', help='Note text')
+    add_p.add_argument('--tags', nargs='*', default=[], help='Tags for the note')
+    add_p.add_argument('--personal', action='store_true', help='Mark note as personal')
+    add_p.add_argument('--context', nargs='*', type=int, default=[], metavar='ID',
+                       help='IDs of related notes')
+
+    show_p = notes_sub.add_parser('show', help='Show recent notes')
+    show_p.add_argument('-n', type=int, default=5, metavar='N', help='Number of notes to display')
+    show_p.add_argument('--tag', help='Filter by tag')
+
+    view_p = notes_sub.add_parser('view', help='View notes around INDEX')
+    view_p.add_argument('index', type=int, help='Center index to view')
+    view_p.add_argument('--radius', type=int, default=0, metavar='N', help='Number of neighbouring notes')
+
     return parser
 
 def discover_modules() -> Dict[str, str]:
@@ -439,8 +458,21 @@ def main() -> int:
                 pipeline = suggest_pipeline(results)
                 print(pipeline)
                 return 0
-            print("[!] Failed to fetch results")
-            return 1
+                print("[!] Failed to fetch results")
+                return 1
+        elif args.command == 'notes':
+            from dev_notes import notes_manager as nm
+            if args.notes_cmd == 'add':
+                nm.add_note(args.text, tags=args.tags, personal=args.personal,
+                            context=args.context)
+                print("[+] Note added")
+                return 0
+            if args.notes_cmd == 'show':
+                nm.show_notes(args.n, tag=args.tag)
+                return 0
+            if args.notes_cmd == 'view':
+                nm.view_notes(args.index, radius=args.radius)
+                return 0
         elif args.command == 'self-evolve':
             from scripts.self_evolve import run_self_evolve
             ok = run_self_evolve()

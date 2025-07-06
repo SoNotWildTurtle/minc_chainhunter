@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 from typing import List
@@ -18,6 +19,20 @@ def build_nmap_cmd(target: str, options: str = "-sV") -> List[str]:
     return cmd
 
 
+def _parse_ports(output: str) -> List[int]:
+    ports: List[int] = []
+    for line in output.splitlines():
+        parts = line.split()
+        if not parts:
+            continue
+        if '/' in parts[0] and len(parts) > 1 and parts[1] == 'open':
+            try:
+                ports.append(int(parts[0].split('/')[0]))
+            except ValueError:
+                continue
+    return sorted(set(ports))
+
+
 def main(argv: List[str] | None = None):
     argv = argv or sys.argv[1:]
     parser = argparse.ArgumentParser(description="Run nmap")
@@ -27,7 +42,11 @@ def main(argv: List[str] | None = None):
 
     cmd = build_nmap_cmd(args.target, options=args.options)
     proc = subprocess.run(cmd, capture_output=True, text=True)
-    result = {"target": args.target, "output": proc.stdout.strip()}
+    out = proc.stdout.strip()
+    result = {"target": args.target, "output": out}
+    ports = _parse_ports(out)
+    if ports:
+        result["ports"] = ports
     result.update(analyze_result(result))
     sock = os.environ.get("MINC_DB_SOCKET")
     if sock:
@@ -40,3 +59,4 @@ def main(argv: List[str] | None = None):
 
 if __name__ == "__main__":
     main()
+

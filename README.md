@@ -40,8 +40,8 @@ Example modules include:
 - `dns_lookup` – resolve DNS records for a domain.
 - `theharvester_scan` – gather emails and subdomains with theHarvester.
 - `amass_scan` – perform subdomain enumeration using Amass.
-- `masscan_scan` – fast port scanning with masscan.
-- `nmap_scan` – service enumeration using nmap.
+- `masscan_scan` – fast port scanning with masscan (ports are parsed for analysis).
+- `nmap_scan` – service enumeration using nmap (open ports extracted).
 - `aquatone_scan` – screenshot discovered hosts with aquatone.
 - `git_dumper_scan` – dump exposed `.git` directories.
  - `xxe_scan` – sends an XML payload to detect XXE vulnerabilities.

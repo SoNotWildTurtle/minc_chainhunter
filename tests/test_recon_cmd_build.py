@@ -35,6 +35,12 @@ def test_masscan_cmd_build():
     assert "--rate" in cmd and cmd[cmd.index("--rate") + 1] == "5000"
 
 
+def test_masscan_parse():
+    sample = "Discovered open port 80/tcp on 1.2.3.4\nDiscovered open port 443/tcp on 1.2.3.4"
+    ports = ma._parse_ports(sample)
+    assert ports == [80, 443]
+
+
 def test_aquatone_cmd_build():
     cmd = aq.build_aquatone_cmd("example.com", out_dir="out")
     script = os.path.join(os.path.dirname(aq.__file__), "..", "github_scanners", "aquatone", "run.sh")

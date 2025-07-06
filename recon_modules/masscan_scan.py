@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 from typing import List
+import re
 
 from analysis_db.db_api import log_scan_result
 from analysis_db.chat_analyzer import analyze_result
@@ -13,6 +14,15 @@ from analysis_db.chat_analyzer import analyze_result
 def build_masscan_cmd(target: str, ports: str = "0-65535", rate: int = 1000) -> List[str]:
     script = os.path.join(os.path.dirname(__file__), "..", "github_scanners", "masscan", "run.sh")
     return ["bash", script, target, "-p", ports, "--rate", str(rate)]
+
+
+def _parse_ports(output: str) -> List[int]:
+    ports: List[int] = []
+    for line in output.splitlines():
+        m = re.search(r"(\d+)/tcp", line)
+        if m:
+            ports.append(int(m.group(1)))
+    return sorted(set(ports))
 
 
 def main(argv: List[str] | None = None):
@@ -25,7 +35,11 @@ def main(argv: List[str] | None = None):
 
     cmd = build_masscan_cmd(args.target, ports=args.ports, rate=args.rate)
     proc = subprocess.run(cmd, capture_output=True, text=True)
-    result = {"target": args.target, "output": proc.stdout.strip()}
+    out = proc.stdout.strip()
+    result = {"target": args.target, "output": out}
+    ports = _parse_ports(out)
+    if ports:
+        result["ports"] = ports
     result.update(analyze_result(result))
     sock = os.environ.get("MINC_DB_SOCKET")
     if sock:
@@ -38,3 +52,4 @@ def main(argv: List[str] | None = None):
 
 if __name__ == "__main__":
     main()
+

@@ -67,6 +67,12 @@ def test_nmap_cmd_build():
     assert "-sS" in cmd
 
 
+def test_nmap_parse():
+    sample = "22/tcp open ssh\n80/tcp open http"
+    ports = nm._parse_ports(sample)
+    assert ports == [22, 80]
+
+
 def test_git_dumper_cmd_build():
     cmd = gd.build_git_dumper_cmd("http://ex.com", out_dir="repo")
     script = os.path.join(os.path.dirname(gd.__file__), "..", "github_scanners", "git_dumper", "run.sh")

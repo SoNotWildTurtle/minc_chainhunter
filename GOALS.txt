@@ -1,0 +1,44 @@
+- integrate CLI with IPC database server
+- add command to generate reports from stored results
+- create additional recon/vuln modules (dns lookup, xxe scanner)
+- enhance sandboxing and security
+- implement self-update mechanism via git pull
+
+- add manager scripts for each directory
+- implement progressive compression for dev notes
+- add slider-based viewer that recompresses distant entries
+- use algorithmic compression (RLE+zlib) instead of switching algorithms
+- extend dev notes format with metadata and tag searching
+- support context-aware viewing where referenced notes are decompressed
+- provide CLI command to manage developer notes
+- expose stored scan results via IPC for quick retrieval
+- refine vulnerability modules with advanced options for bundled GitHub scanners
+- implement pipeline module for automated bug hunting
+- improve sandbox DB security with privilege dropping
+- add extended bug hunting pipeline using multiple scanners
+- log individual module results in addition to pipeline summaries
+- create pipeline to scan git repositories for secrets using gitleaks and
+  trufflehog
+- verify DB handles approved aliases over IPC
+
+- automate local cloning of scanner repositories when missing
+- refine ChatGPT tagging for database results
+- integrate repo_hunt pipeline with automatic reporting using MINC_AUTO_REPORT
+- verify extended_hunt pipeline results and automate ChatGPT bug reports
+- add recon modules for theHarvester and amass and verify installation
+- add masscan and nmap modules for aggressive scanning
+- add aquatone and git_dumper modules with repo installation
+- add xsstrike module for XSS scanning and verify installation
+- integrate neural analyzer with CLI to recommend pipelines from stored results
+- develop comprehensive self-healing tests to reinstall scanners and validate DB integrity
+- consolidate to a single version and retire version analyzer
+- add 'self-evolve' CLI command to run Codex for automatic upgrades
+- enhance neural analyzer using collected scan data for improved recommendations
+- incorporate vulnerability counts and tags into neural analyzer features for
+  smarter pipeline chaining
+- document numpy and scikit-learn as dependencies
+- extend 'self-evolve' to run bug hunting and self-healing routines for automatic security upgrades
+- add self-heal command for standalone recovery
+- install systemd service to keep ChainHunter running
+- persist neural analyzer model to disk for consistent suggestions
+- allow searching stored results by tag via CLI

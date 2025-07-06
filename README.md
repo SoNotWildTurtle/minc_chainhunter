@@ -334,6 +334,18 @@ You can trigger a retraining cycle for the neural analyzer using stored results:
 python3 cli/main.py train
 ```
 
+### Run scheduled scans
+
+You can automate recurring scans by listing tasks in a JSON file and running the
+scheduler:
+
+```bash
+python3 cli/main.py schedule --file tasks.json
+```
+
+Each task entry should include `args` for the CLI and an optional `interval` in
+seconds before the next task runs.
+
 ## Auto-start service
 
 Run `scripts/install_service.sh` to install a systemd user service that keeps ChainHunter running in an `xterm` window. The script creates a Python virtual environment under `venv` and installs the service and hourly timer in `~/.config/systemd/user`.

@@ -133,6 +133,10 @@ def setup_argparse() -> argparse.ArgumentParser:
     # Train command
     train_parser = subparsers.add_parser('train', help='Retrain neural model from DB results')
 
+    # Schedule command
+    sched_parser = subparsers.add_parser('schedule', help='Run scheduled tasks')
+    sched_parser.add_argument('--file', default='tasks.json', help='Tasks JSON file')
+
     # Self-evolve command
     evolve_parser = subparsers.add_parser('self-evolve', help='Run Codex to upgrade ChainHunter')
     evolve_parser.add_argument('--target', default='127.0.0.1', help='Target for bug hunt')
@@ -548,6 +552,10 @@ def main() -> int:
                 return 0
             print("[!] Failed to retrain model")
             return 1
+        elif args.command == 'schedule':
+            from scripts.scheduler import run_schedule
+            run_schedule(args.file)
+            return 0
         elif args.command == 'notes':
             from dev_notes import notes_manager as nm
             if args.notes_cmd == 'add':

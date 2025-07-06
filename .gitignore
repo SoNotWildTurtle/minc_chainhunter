@@ -10,3 +10,5 @@ vuln_modules/__pycache__/
 pipelines/__pycache__/
 cli/__pycache__/
 analysis_db/model.pkl
+analysis_db/module_model.pkl
+venv/

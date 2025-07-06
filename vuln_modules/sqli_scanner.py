@@ -18,20 +18,24 @@ SQL_ERRORS = [
 ]
 
 
-def scan_url(url: str, payload: str) -> bool:
-    """Return True if potential SQL error is detected."""
+def scan_url(url: str, payload: str) -> tuple[bool, dict]:
+    """Return detection result and raw data."""
     if not url.startswith(("http://", "https://")):
         url = "http://" + url
     if "?" in url:
         test_url = url + urllib.parse.quote(payload)
     else:
         test_url = url + "?q=" + urllib.parse.quote(payload)
+    raw = {"url": test_url}
     try:
         with urllib.request.urlopen(test_url, timeout=5) as resp:
-            body = resp.read().decode(errors="ignore").lower()
-    except Exception:
-        return False
-    return any(err in body for err in SQL_ERRORS)
+            body = resp.read().decode(errors="ignore")
+            raw.update({"status": resp.getcode(), "response": body[:200]})
+    except Exception as e:
+        raw.update({"error": str(e)})
+        return False, raw
+    detected = any(err in body.lower() for err in SQL_ERRORS)
+    return detected, raw
 
 
 def main(argv: list[str] | None = None):
@@ -42,14 +46,14 @@ def main(argv: list[str] | None = None):
     args = parser.parse_args(argv)
 
     print(f"[+] Scanning {args.url} for SQL injection")
-    vulnerable = scan_url(args.url, args.payload)
+    vulnerable, raw = scan_url(args.url, args.payload)
     vulnerabilities = []
     if vulnerable:
         print("[!] SQL injection detected")
         vulnerabilities.append({"payload": args.payload})
     else:
         print("[-] No vulnerabilities found")
-    result = {"target": args.url, "vulnerabilities": vulnerabilities}
+    result = {"target": args.url, "vulnerabilities": vulnerabilities, "raw": raw}
     result.update(analyze_result(result))
     sock = os.environ.get("MINC_DB_SOCKET")
     if sock:

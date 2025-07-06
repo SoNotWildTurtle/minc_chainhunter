@@ -16,6 +16,7 @@
 - integrate ChatGPT pipeline planning via new 'plan' command
 - refine vulnerability modules with advanced options for bundled GitHub scanners
 - implement pipeline module for automated bug hunting
+- verify bug_hunt pipeline functions correctly and keep tests passing
 - improve sandbox DB security with privilege dropping
 - add optional chroot isolation for analysis DB server
 - add extended bug hunting pipeline using multiple scanners

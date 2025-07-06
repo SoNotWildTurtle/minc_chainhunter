@@ -1,7 +1,7 @@
 # Short-term goals
 [G52] implement plugin manager for third-party modules (basic install/list done)
 [G53] add automated scanning scheduler (basic script done)
-[G54] store raw request and response data in database
+[G54] store raw request and response data in database (done)
 [G55] export reports to PDF and JSON via CLI (done)
 [G56] support concurrent multi-target scans (done)
 [G57] add cross-platform integration tests

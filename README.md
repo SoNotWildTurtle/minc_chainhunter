@@ -68,6 +68,8 @@ Example modules include:
   alongside their summaries.
 - Each stored entry also records a `vuln_count` value representing the total
   number of vulnerabilities found in that pipeline run.
+  When possible, modules include a `raw` field capturing request and response
+  data for deeper analysis.
 
 The IPC bus components are under development. `bus_integrity.py` includes helper functions to verify socket permissions and approved command aliases.
 

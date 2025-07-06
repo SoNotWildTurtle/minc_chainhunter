@@ -13,13 +13,16 @@ def main(argv=None):
         print("Usage: dns_lookup.py <domain>")
         return False
     domain = argv[0]
+    raw = {"query": domain}
     try:
         _, _, ips = socket.gethostbyname_ex(domain)
         print(f"[+] {domain} -> {', '.join(ips)}")
-        result = {"target": domain, "ips": ips}
+        raw["response"] = ",".join(ips)
+        result = {"target": domain, "ips": ips, "raw": raw}
     except Exception as e:
         print(f"[!] Lookup failed: {e}")
-        result = {"target": domain, "error": str(e)}
+        raw["error"] = str(e)
+        result = {"target": domain, "error": str(e), "raw": raw}
     result.update(analyze_result(result))
     sock = os.environ.get("MINC_DB_SOCKET")
     if sock:

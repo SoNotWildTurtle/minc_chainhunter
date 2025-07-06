@@ -19,3 +19,4 @@ def test_xxe_scan_run():
     assert isinstance(res, dict)
     assert res["target"] == "127.0.0.1"
     assert "vulnerabilities" in res
+    assert "raw" in res

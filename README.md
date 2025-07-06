@@ -18,7 +18,7 @@ python3 cli/main.py run <module> [args]
 Example modules include:
 
 - `ping_sweep` – performs a simple ICMP ping to the supplied host.
-- `sqli_scanner` – placeholder that always reports no vulnerabilities.
+ - `sqli_scanner` – performs a basic SQL injection test using an HTTP request.
 - `subfinder_scan` – enumerate subdomains using subfinder.
 - `hakrawler_scan` – crawl a target site for links.
 - `dirsearch_scan` – brute-force directories on a web server. Supports `--wordlist`,
@@ -37,7 +37,7 @@ Example modules include:
 - `nmap_scan` – service enumeration using nmap.
 - `aquatone_scan` – screenshot discovered hosts with aquatone.
 - `git_dumper_scan` – dump exposed `.git` directories.
-- `xxe_scan` – placeholder XXE scanner using a custom payload.
+ - `xxe_scan` – sends an XML payload to detect XXE vulnerabilities.
 - `xsstrike_scan` – detect reflected XSS vulnerabilities using XSStrike.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.

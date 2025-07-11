@@ -220,14 +220,15 @@ reads the current goals and attempts to run Codex using your `OPENAI_API_KEY`.
 If the key is missing, it simply reports that self-evolution was skipped.
 
 ```bash
-python3 cli/main.py self-evolve [--target <host>] [--heal]
+python3 cli/main.py self-evolve [--target <host>] [--heal] [--patch SCRIPT]
 ```
 
 When invoked, ChainHunter loads recent results from the analysis database and
 uses the neural analyzer to choose the best pipeline for self-evolution. The
 pipeline runs with a worker count derived from `MINC_SELF_RATIO` (default `0.2`)
 to limit CPU usage. Use `--heal` to reinstall local scanner repositories and
-execute the test suite for a self-healing security upgrade.
+execute the test suite for a self-healing security upgrade. Provide `--patch`
+with a Python script to apply changes after the script passes sandbox tests.
 
 ### Self-healing only
 

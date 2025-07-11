@@ -6,8 +6,9 @@
 [G56] support concurrent multi-target scans (done)
 [G57] add cross-platform integration tests (done)
 [G59] auto-install Python requirements (done)
-[G60] smarter self-evolve pipeline selection with neural analyzer and CPU ratio control
+[G60] smarter self-evolve pipeline selection with neural analyzer and CPU ratio control (done)
 [G61] sandboxed debugger and memory patcher for safe code evolution
+[G62] apply patch scripts via self-evolve after sandbox testing
 [G61a] add automatic backups and rollback to memory patcher (done)
 
 # Long-term goals

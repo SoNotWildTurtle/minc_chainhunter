@@ -9,6 +9,7 @@ from pathlib import Path
 from .self_heal import run_self_heal
 from analysis_db.db_api import get_results
 from analysis_db.neural_analyzer import suggest_pipeline
+from sandbox.debugger import apply_evolution
 
 
 def _decide_pipeline(repo: Path, limit: int = 10) -> str:
@@ -39,9 +40,23 @@ def _run_pipeline(pipeline: str, target: str, repo: Path, workers: int) -> None:
     subprocess.run(cmd, cwd=repo, check=False)
 
 
+def _apply_patch(script: str, repo: Path) -> bool:
+    """Run patch SCRIPT in sandbox then apply to repo if tests pass."""
+    def patch(tmp_repo: Path) -> None:
+        subprocess.run([sys.executable, script], cwd=tmp_repo, check=False)
+
+    print(f"[*] Testing patch {script} in sandbox")
+    if not apply_evolution(patch, repo_dir=str(repo)):
+        print("[!] Patch failed in sandbox")
+        return False
+    subprocess.run([sys.executable, script], cwd=repo, check=False)
+    print("[+] Applied patch script")
+    return True
 
 
-def run_self_evolve(repo_dir: str | None = None, target: str = "127.0.0.1", heal: bool = False) -> bool:
+
+
+def run_self_evolve(repo_dir: str | None = None, target: str = "127.0.0.1", heal: bool = False, patch_script: str | None = None) -> bool:
     repo = Path(repo_dir) if repo_dir else Path(__file__).resolve().parents[1]
     print(f"[*] Starting self-evolution in {repo}")
     api_key = os.environ.get("OPENAI_API_KEY")
@@ -63,6 +78,10 @@ def run_self_evolve(repo_dir: str | None = None, target: str = "127.0.0.1", heal
     workers = max(1, int((os.cpu_count() or 1) * ratio))
     print(f"[*] Running {pipeline} pipeline for self-evolution with {workers} workers")
     _run_pipeline(pipeline, target, repo, workers)
+
+    if patch_script:
+        if not _apply_patch(patch_script, repo):
+            return False
 
     if heal:
         print("[*] Performing self-healing routine")

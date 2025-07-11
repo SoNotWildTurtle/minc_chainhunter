@@ -16,3 +16,12 @@ def test_cli_self_evolve_heal():
     proc = subprocess.run([sys.executable, 'cli/main.py', 'self-evolve', '--heal'], capture_output=True, text=True, env=env)
     assert proc.returncode == 0
     assert 'self-healing' in proc.stdout.lower() or 'self-heal' in proc.stdout.lower()
+
+
+def test_cli_self_evolve_patch(tmp_path):
+    script = tmp_path / 'patch.py'
+    script.write_text("print('patched')")
+    proc = subprocess.run([sys.executable, 'cli/main.py', 'self-evolve', '--patch', str(script)], capture_output=True, text=True)
+    assert proc.returncode == 0
+    assert 'patch script' in proc.stdout.lower()
+

@@ -5,7 +5,7 @@
 [G55] export reports to PDF and JSON via CLI (done)
 [G56] support concurrent multi-target scans (done)
 [G57] add cross-platform integration tests (done)
-[G58] recommend next modules using neural analyzer (done)
+[G59] auto-install Python requirements (done)
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

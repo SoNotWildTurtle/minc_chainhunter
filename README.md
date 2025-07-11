@@ -19,6 +19,8 @@ Install the following Python packages:
 ```
 pip install numpy scikit-learn cryptography fpdf
 ```
+Run `python3 scripts/install_requirements.py` to install these packages and any requirements from cloned scanners.
+
 
 
 ## Usage
@@ -82,6 +84,7 @@ required GitHub projects locally:
 ```bash
 ./scripts/install_scanner_repos.sh
 ```
+Run `python3 scripts/install_requirements.py` to install Python dependencies.
 
 This script clones the latest versions of several scanners under
 `github_scanners/*/src` so the wrapper scripts can execute them. Currently the

@@ -11,6 +11,7 @@
 [G62] apply patch scripts via self-evolve after sandbox testing (done)
 [G61a] add automatic backups and rollback to memory patcher (done)
 [G63] separate bug hunting and offensive modules; add Mythic offensive module (done)
+[G64] list pipeline modules separately in the CLI
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

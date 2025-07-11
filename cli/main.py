@@ -99,7 +99,7 @@ def setup_argparse() -> argparse.ArgumentParser:
     list_parser = subparsers.add_parser('list', help='List available modules')
     list_parser.add_argument(
         '-t', '--type',
-        choices=['all', 'recon', 'vuln', 'offensive'],
+        choices=['all', 'recon', 'vuln', 'offensive', 'pipeline'],
         default='all',
         help='Filter modules by type'
     )
@@ -202,7 +202,9 @@ def discover_modules() -> Dict[str, str]:
                     continue
                 name = os.path.splitext(os.path.basename(pf))[0]
                 mod_type = 'recon'
-                if 'offensive_modules' in pf or 'offensive' in name:
+                if 'pipelines' in pf or 'pipeline' in name:
+                    mod_type = 'pipeline'
+                elif 'offensive_modules' in pf or 'offensive' in name:
                     mod_type = 'offensive'
                 elif 'vuln' in pf or 'vuln' in name:
                     mod_type = 'vuln'
@@ -528,6 +530,14 @@ def main() -> int:
                     print("\nOffensive Pentesting:" + " " * 23 + "(Type: offensive)")
                     print("-" * 50)
                     for mod in sorted(offensive):
+                        print(f"  {mod}")
+
+            if args.type in ['all', 'pipeline']:
+                pipelines = [m for m, data in MODULES.items() if data['type'] == 'pipeline']
+                if pipelines:
+                    print("\nPipelines:" + " " * 34 + "(Type: pipeline)")
+                    print("-" * 50)
+                    for mod in sorted(pipelines):
                         print(f"  {mod}")
             
             print(f"\nTotal modules: {len(MODULES)}")

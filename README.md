@@ -29,6 +29,7 @@ Run `python3 scripts/install_requirements.py` to install these packages and any 
 ```
 python3 cli/main.py                # interactive mode
 python3 cli/main.py list           # list available modules
+python3 cli/main.py list -t pipeline  # list available pipelines
 python3 cli/main.py run <module> [args]
 python3 cli/main.py run <module> --targets host1 host2  # run concurrently
 ```

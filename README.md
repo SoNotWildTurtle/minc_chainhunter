@@ -70,6 +70,7 @@ Example modules include:
   nuclei, gitleaks, trufflehog) in sequence for deeper analysis.
 - `repo_hunt` – scan a repository with gitleaks and trufflehog to uncover
   secrets.
+- `port_scan` – quickly discover open ports with masscan and enumerate them with nmap.
 - Modules automatically log results to the analysis database whenever the
   `MINC_DB_SOCKET` environment variable is set, so pipeline steps are stored
   alongside their summaries.
@@ -198,6 +199,13 @@ python3 cli/main.py run extended_hunt https://example.com
 This sequence performs subdomain discovery, crawling, directory brute force,
 generic vulnerability scanning and secret detection before saving combined
 results.
+
+`port_scan` performs a fast port sweep with `masscan` then follows up with
+`nmap` for service enumeration:
+
+```bash
+python3 cli/main.py run port_scan 127.0.0.1
+```
 
 `repo_hunt` focuses on repository secrets detection using gitleaks and
 trufflehog:

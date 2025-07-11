@@ -1,5 +1,9 @@
 #!/bin/bash
 # Wrapper for nmap
+if [ "$SKIP_CLONE" = "1" ]; then
+    echo "Skipping nmap execution"
+    exit 0
+fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_DIR="${SCRIPT_DIR}/src"
 BIN="${REPO_DIR}/nmap"

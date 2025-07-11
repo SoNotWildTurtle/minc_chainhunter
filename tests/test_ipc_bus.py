@@ -14,3 +14,4 @@ def test_module_discovery():
     assert "xxe_scan" in mods
     assert "trufflehog_scan" in mods
     assert "extended_hunt" in mods
+    assert "mythic_control" in mods

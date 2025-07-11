@@ -10,6 +10,7 @@
 [G61] sandboxed debugger and memory patcher for safe code evolution
 [G62] apply patch scripts via self-evolve after sandbox testing
 [G61a] add automatic backups and rollback to memory patcher (done)
+[G63] separate bug hunting and offensive modules; add Mythic offensive module
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

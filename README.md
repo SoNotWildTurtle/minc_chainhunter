@@ -61,6 +61,7 @@ Example modules include:
 - `git_dumper_scan` – dump exposed `.git` directories.
  - `xxe_scan` – sends an XML payload to detect XXE vulnerabilities.
 - `xsstrike_scan` – detect reflected XSS vulnerabilities using XSStrike.
+- `mythic_control` – manage the Mythic C2 framework (offensive).
 - `sqlmap_scan` – run sqlmap for automated SQL injection exploitation.
 - `bug_hunt` – run a simple pipeline combining `ping_sweep` and `sqli_scanner`
   with results saved through the CLI.
@@ -107,6 +108,7 @@ following upstream tools are fetched:
 - **git-dumper** – dump exposed git repositories
 - **aquatone** – screenshotting tool for discovered hosts
 - **XSStrike** – advanced XSS detection tool
+- **Mythic** – command-and-control framework for offensive testing
 
 Feel free to add additional tools by editing the script.
 
@@ -158,6 +160,21 @@ python3 vuln_modules/manager.py run nuclei_scan https://example.com
 ```
 
 These helpers make it easy to automate tasks with minimal commands.
+
+## Offensive modules
+
+Offensive pentesting tools such as Mythic are placed in `offensive_modules/`.
+They require manual supervision and should be run in coordination with
+ChainHunter through interactive prompts. Use the manager script to list or run
+them:
+
+```bash
+python3 offensive_modules/manager.py --list
+python3 offensive_modules/manager.py run mythic_control install
+```
+
+ChainHunter will log results to the database, but it is expected that a human
+operator reviews each step when using these modules.
 
 ## Bug hunting pipelines
 

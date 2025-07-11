@@ -50,7 +50,13 @@ PLUGIN_DIR = os.environ.get(
     'CHAINHUNTER_PLUGIN_DIR',
     os.path.join(os.path.dirname(__file__), '..', 'plugins', 'installed')
 )
-MODULE_DIRS = ["../recon_modules", "../vuln_modules", "../pipelines", PLUGIN_DIR]
+MODULE_DIRS = [
+    "../recon_modules",
+    "../vuln_modules",
+    "../offensive_modules",
+    "../pipelines",
+    PLUGIN_DIR,
+]
 MODULES: Dict[str, str] = {}
 VERSION = "1.0.0"
 
@@ -93,7 +99,7 @@ def setup_argparse() -> argparse.ArgumentParser:
     list_parser = subparsers.add_parser('list', help='List available modules')
     list_parser.add_argument(
         '-t', '--type',
-        choices=['all', 'recon', 'vuln'],
+        choices=['all', 'recon', 'vuln', 'offensive'],
         default='all',
         help='Filter modules by type'
     )
@@ -196,7 +202,9 @@ def discover_modules() -> Dict[str, str]:
                     continue
                 name = os.path.splitext(os.path.basename(pf))[0]
                 mod_type = 'recon'
-                if 'vuln' in pf or 'vuln' in name:
+                if 'offensive_modules' in pf or 'offensive' in name:
+                    mod_type = 'offensive'
+                elif 'vuln' in pf or 'vuln' in name:
                     mod_type = 'vuln'
                 modules[name] = {
                     'path': pf,
@@ -313,6 +321,7 @@ def show_interactive_menu() -> None:
     # Group modules by type
     recon_modules = [m for m, data in MODULES.items() if data['type'] == 'recon']
     vuln_modules = [m for m, data in MODULES.items() if data['type'] == 'vuln']
+    off_modules = [m for m, data in MODULES.items() if data['type'] == 'offensive']
     
     if recon_modules:
         if sys.stdout.isatty():
@@ -332,6 +341,18 @@ def show_interactive_menu() -> None:
             print("\nVulnerability Assessment:")
         start_idx = len(recon_modules) + 1
         for i, mod in enumerate(sorted(vuln_modules), start_idx):
+            if sys.stdout.isatty():
+                print(GREEN + f"  [{i}] {mod}" + RESET)
+            else:
+                print(f"  [{i}] {mod}")
+
+    if off_modules:
+        if sys.stdout.isatty():
+            print(PURPLE + "\nOffensive Pentesting:" + RESET)
+        else:
+            print("\nOffensive Pentesting:")
+        start_idx = len(recon_modules) + len(vuln_modules) + 1
+        for i, mod in enumerate(sorted(off_modules), start_idx):
             if sys.stdout.isatty():
                 print(GREEN + f"  [{i}] {mod}" + RESET)
             else:
@@ -492,12 +513,21 @@ def main() -> int:
                     for mod in sorted(recon):
                         print(f"  {mod}")
             
+
             if args.type in ['all', 'vuln']:
                 vuln = [m for m, data in MODULES.items() if data['type'] == 'vuln']
                 if vuln:
                     print("\nVulnerability Assessment:" + " " * 20 + "(Type: vuln)")
                     print("-" * 50)
                     for mod in sorted(vuln):
+                        print(f"  {mod}")
+
+            if args.type in ['all', 'offensive']:
+                offensive = [m for m, data in MODULES.items() if data['type'] == 'offensive']
+                if offensive:
+                    print("\nOffensive Pentesting:" + " " * 23 + "(Type: offensive)")
+                    print("-" * 50)
+                    for mod in sorted(offensive):
                         print(f"  {mod}")
             
             print(f"\nTotal modules: {len(MODULES)}")

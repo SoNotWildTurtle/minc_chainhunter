@@ -201,6 +201,10 @@ requests a report from the analysis database after any module finishes
 executing. Use `MINC_AUTO_REPORT_DIR` to change the output directory (defaults to
 `reports`).
 
+`MINC_SELF_RATIO` controls how much processing power is dedicated to the
+self‑evolution routine. The default value `0.2` uses roughly 20% of available
+CPU cores when running self-evolve.
+
 
 ## Self-update
 
@@ -219,9 +223,11 @@ If the key is missing, it simply reports that self-evolution was skipped.
 python3 cli/main.py self-evolve [--target <host>] [--heal]
 ```
 
-When invoked, ChainHunter runs a quick `bug_hunt` scan against the chosen
-target. Use `--heal` to reinstall local scanner repositories and execute the
-test suite for a self-healing security upgrade.
+When invoked, ChainHunter loads recent results from the analysis database and
+uses the neural analyzer to choose the best pipeline for self-evolution. The
+pipeline runs with a worker count derived from `MINC_SELF_RATIO` (default `0.2`)
+to limit CPU usage. Use `--heal` to reinstall local scanner repositories and
+execute the test suite for a self-healing security upgrade.
 
 ### Self-healing only
 

@@ -6,6 +6,7 @@
 [G56] support concurrent multi-target scans (done)
 [G57] add cross-platform integration tests (done)
 [G59] auto-install Python requirements (done)
+[G60] smarter self-evolve pipeline selection with neural analyzer and CPU ratio control
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

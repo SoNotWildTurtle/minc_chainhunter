@@ -1,22 +1,42 @@
 #!/usr/bin/env python3
 """Trigger Codex-based self evolution with self-healing."""
 import os
+import os
 import sys
 import subprocess
 from pathlib import Path
 
 from .self_heal import run_self_heal
+from analysis_db.db_api import get_results
+from analysis_db.neural_analyzer import suggest_pipeline
 
 
-def _run_bug_hunt(target: str, repo: Path) -> None:
-    """Run a lightweight bug hunting pipeline."""
-    subprocess.run([
+def _decide_pipeline(repo: Path, limit: int = 10) -> str:
+    """Return the pipeline recommended for self-evolution."""
+    sock = os.environ.get("MINC_DB_SOCKET", "/tmp/minc_db.sock")
+    try:
+        resp = get_results(sock, limit=limit)
+        if resp.get("status") == "ok":
+            results = resp.get("results", [])
+            if results:
+                return suggest_pipeline(results)
+    except Exception:
+        pass
+    return "bug_hunt"
+
+
+def _run_pipeline(pipeline: str, target: str, repo: Path, workers: int) -> None:
+    """Run the selected pipeline with a worker limit."""
+    cmd = [
         sys.executable,
         "cli/main.py",
         "run",
-        "bug_hunt",
+        pipeline,
         target,
-    ], cwd=repo, check=False)
+        "--workers",
+        str(workers),
+    ]
+    subprocess.run(cmd, cwd=repo, check=False)
 
 
 
@@ -38,8 +58,11 @@ def run_self_evolve(repo_dir: str | None = None, target: str = "127.0.0.1", heal
     else:
         print("[!] OPENAI_API_KEY not set. Skipping Codex execution.")
 
-    print("[*] Running bug hunt pipeline for self-evolution")
-    _run_bug_hunt(target, repo)
+    pipeline = _decide_pipeline(repo)
+    ratio = float(os.environ.get("MINC_SELF_RATIO", "0.2"))
+    workers = max(1, int((os.cpu_count() or 1) * ratio))
+    print(f"[*] Running {pipeline} pipeline for self-evolution with {workers} workers")
+    _run_pipeline(pipeline, target, repo, workers)
 
     if heal:
         print("[*] Performing self-healing routine")

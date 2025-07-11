@@ -7,8 +7,10 @@ case "$1" in
     "$DIR/db_env/run_db.sh" ;;
   run_main)
     "$DIR/main_app/run_main.sh" ;;
+  debug)
+    python3 "$DIR/debugger.py" "${@:2}" ;;
   *)
-    echo "Usage: $0 {run_db|run_main}"
+    echo "Usage: $0 {run_db|run_main|debug <script>}"
     exit 1
     ;;
 esac

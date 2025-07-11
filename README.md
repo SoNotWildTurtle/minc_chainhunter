@@ -240,6 +240,32 @@ python3 cli/main.py self-heal
 This command reinstalls scanner repositories (with `SKIP_CLONE=1`) and runs the
 test suite to verify database integrity and module functionality.
 
+### Sandboxed debugging
+
+Use the built-in debugger to test evolution scripts in an isolated copy of the
+repository. The helper copies the entire project to a temporary directory,
+executes the provided script, and optionally runs the test suite.
+
+```bash
+python3 sandbox/debugger.py my_patch.py
+```
+
+The script runs inside the sandbox so existing code remains untouched. Only if
+tests pass should you apply changes back to the main repository, optionally
+using the memory patcher described below.
+
+### Memory patching
+
+After debugging, files can be modified directly via `mmap` using the memory
+patcher utility:
+
+```bash
+python3 sandbox/memory_patcher.py path/to/file.py 10 "newtext"
+```
+
+This writes bytes to the chosen offset without reopening the file. Combine this
+with the debugger to safely update code after several test rounds.
+
 ## Developer notes
 
 Development notes are stored in a compressed format inside `DEV_NOTES.dat`.

@@ -15,6 +15,7 @@ Install the following Python packages:
 - `numpy` and `scikit-learn` for the neural analyzer
 - `cryptography` if you enable database encryption
 - `fpdf` if you want PDF report generation
+- `colorama` for colorful terminal output
 
 ```
 pip install numpy scikit-learn cryptography fpdf
@@ -33,6 +34,8 @@ python3 cli/main.py run <module> --targets host1 host2  # run concurrently
 ```
 
 Use `--workers` to control the number of concurrent threads when running multiple targets.
+
+The interactive mode now displays a colorful banner titled **ChainHunter Bug Hunting Utility** when run in a real terminal. Pipeline steps announce themselves and pause for confirmation when the session is interactive.
 
 Example modules include:
 

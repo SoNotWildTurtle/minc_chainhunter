@@ -21,6 +21,7 @@ import importlib
 import glob
 import argparse
 import logging
+from colorama import init, Fore, Style
 import json
 import subprocess
 from typing import Dict, List, Optional, Any
@@ -36,6 +37,13 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# initialize colorama for pretty output when TTY is available
+init(autoreset=True)
+
+GREEN = Fore.GREEN + Style.BRIGHT
+PURPLE = Fore.MAGENTA + Style.BRIGHT
+RESET = Style.RESET_ALL
 
 # Configuration
 PLUGIN_DIR = os.environ.get(
@@ -295,27 +303,48 @@ def run_module_multi(name: str, targets: List[str], args: List[str], workers: in
 
 def show_interactive_menu() -> None:
     """Show the interactive menu for module selection."""
-    print(f"\n=== MINC ChainHunter v{VERSION} ===")
-    print("Available modules:")
+    if sys.stdout.isatty():
+        print(PURPLE + f"\n=== ChainHunter Bug Hunting Utility v{VERSION} ===" + RESET)
+        print(GREEN + "Available modules:" + RESET)
+    else:
+        print(f"\n=== MINC ChainHunter v{VERSION} ===")
+        print("Available modules:")
     
     # Group modules by type
     recon_modules = [m for m, data in MODULES.items() if data['type'] == 'recon']
     vuln_modules = [m for m, data in MODULES.items() if data['type'] == 'vuln']
     
     if recon_modules:
-        print("\nReconnaissance:")
+        if sys.stdout.isatty():
+            print(PURPLE + "\nReconnaissance:" + RESET)
+        else:
+            print("\nReconnaissance:")
         for i, mod in enumerate(sorted(recon_modules), 1):
-            print(f"  [{i}] {mod}")
+            if sys.stdout.isatty():
+                print(GREEN + f"  [{i}] {mod}" + RESET)
+            else:
+                print(f"  [{i}] {mod}")
     
     if vuln_modules:
-        print("\nVulnerability Assessment:")
+        if sys.stdout.isatty():
+            print(PURPLE + "\nVulnerability Assessment:" + RESET)
+        else:
+            print("\nVulnerability Assessment:")
         start_idx = len(recon_modules) + 1
         for i, mod in enumerate(sorted(vuln_modules), start_idx):
-            print(f"  [{i}] {mod}")
+            if sys.stdout.isatty():
+                print(GREEN + f"  [{i}] {mod}" + RESET)
+            else:
+                print(f"  [{i}] {mod}")
     
-    print("\n  [u] Update/upgrade MINC ChainHunter")
-    print("  [i] <module> Show module information")
-    print("  [q] Quit")
+    if sys.stdout.isatty():
+        print(GREEN + "\n  [u] Update/upgrade MINC ChainHunter" + RESET)
+        print(GREEN + "  [i] <module> Show module information" + RESET)
+        print(GREEN + "  [q] Quit" + RESET)
+    else:
+        print("\n  [u] Update/upgrade MINC ChainHunter")
+        print("  [i] <module> Show module information")
+        print("  [q] Quit")
 
 def interactive_mode() -> None:
     """Run MINC ChainHunter in interactive mode."""
@@ -335,7 +364,10 @@ def interactive_mode() -> None:
                 continue
                 
             if choice == 'q':
-                print("\n[+] Exiting MINC ChainHunter. Stay secure!")
+                if sys.stdout.isatty():
+                    print(PURPLE + "\n[+] Exiting ChainHunter. Stay secure!" + RESET)
+                else:
+                    print("\n[+] Exiting MINC ChainHunter. Stay secure!")
                 break
                 
             if choice == 'u':

@@ -257,14 +257,22 @@ using the memory patcher described below.
 ### Memory patching
 
 After debugging, files can be modified directly via `mmap` using the memory
-patcher utility:
+patcher utility. A backup is created automatically so changes can be rolled
+back if something goes wrong:
 
 ```bash
 python3 sandbox/memory_patcher.py path/to/file.py 10 "newtext"
 ```
 
-This writes bytes to the chosen offset without reopening the file. Combine this
-with the debugger to safely update code after several test rounds.
+To restore the backup, run:
+
+```bash
+python3 sandbox/memory_patcher.py path/to/file.py --rollback
+```
+
+This writes bytes to the chosen offset without reopening the file and saves the
+original as `path/to/file.py.bak`. Combine this with the debugger to safely
+update code after several test rounds.
 
 ## Developer notes
 

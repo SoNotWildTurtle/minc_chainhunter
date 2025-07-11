@@ -8,6 +8,7 @@
 [G59] auto-install Python requirements (done)
 [G60] smarter self-evolve pipeline selection with neural analyzer and CPU ratio control
 [G61] sandboxed debugger and memory patcher for safe code evolution
+[G61a] add automatic backups and rollback to memory patcher (done)
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from sandbox.debugger import apply_evolution
-from sandbox.memory_patcher import patch_file
+from sandbox.memory_patcher import patch_file, rollback_file
 
 def test_apply_evolution(tmp_path):
     sample = tmp_path / "sample.txt"
@@ -21,3 +21,8 @@ def test_patch_file(tmp_path):
     f.write_bytes(b"ABCDEFG")
     patch_file(f, 2, b"ZZ")
     assert f.read_bytes() == b"ABZZEFG"
+    backup = f.with_suffix(f.suffix + ".bak")
+    assert backup.exists()
+    rollback_file(f)
+    assert not backup.exists()
+    assert f.read_bytes() == b"ABCDEFG"

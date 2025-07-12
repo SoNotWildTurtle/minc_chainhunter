@@ -22,7 +22,13 @@ pip install numpy scikit-learn cryptography fpdf
 ```
 Run `python3 scripts/install_requirements.py` to install these packages and any requirements from cloned scanners.
 ## Operating systems
-ChainHunter runs on Linux systems such as Kali and on Windows via WSL or PowerShell. Most modules rely on bash, so Windows users should run in WSL or Git Bash for full compatibility.
+ChainHunter runs on Linux distributions like Kali and can operate on Windows.
+Windows users may run within WSL for best compatibility, or invoke the tools
+using PowerShell. The IPC bus uses UNIX sockets by default; on Windows set
+`MINC_DB_SOCKET` to a TCP address such as `tcp://127.0.0.1:8765` and the server
+will listen on that port instead.
+Install scanner repositories with `scripts/install_scanner_repos.ps1` when using
+PowerShell.
 
 
 
@@ -160,9 +166,11 @@ request and response data from stored results into the specified directory.
 
 You can launch the analysis database server with `scripts/setup_ipc_bus.sh`,
 which starts the IPC service at the path specified by the `MINC_DB_SOCKET`
-environment variable. The server now drops privileges to the `nobody` user by
-default when started through the sandbox scripts, ensuring results are written
-with secure permissions.
+environment variable. On Windows, run
+`python -m analysis_db.db_init --socket tcp://127.0.0.1:8765` to start the
+server using a TCP socket. The server now drops privileges to the `nobody` user
+by default when started through the sandbox scripts, ensuring results are
+written with secure permissions.
 
 ### Sandbox helpers
 

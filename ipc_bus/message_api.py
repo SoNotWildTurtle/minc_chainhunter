@@ -3,7 +3,16 @@
 import json
 import os
 import socket
-from typing import Dict
+from typing import Dict, Tuple
+
+
+def _parse_sock(sock_path: str) -> Tuple[socket.AddressFamily, Tuple[str, int] | str]:
+    """Return address family and address tuple/path for the socket."""
+    if sock_path.startswith("tcp://"):
+        host_port = sock_path[6:]
+        host, port_str = host_port.split(":", 1)
+        return socket.AF_INET, (host, int(port_str))
+    return socket.AF_UNIX, sock_path
 
 
 def send_request(sock_path: str, payload: Dict) -> Dict:
@@ -12,8 +21,9 @@ def send_request(sock_path: str, payload: Dict) -> Dict:
     if secret:
         payload = {"secret": secret, **payload}
 
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
-        client.connect(sock_path)
+    family, addr = _parse_sock(sock_path)
+    with socket.socket(family, socket.SOCK_STREAM) as client:
+        client.connect(addr)
         client.sendall(json.dumps(payload).encode())
         client.shutdown(socket.SHUT_WR)
         data = b""

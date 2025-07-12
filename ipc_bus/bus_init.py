@@ -3,7 +3,15 @@
 import json
 import os
 import socket
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Tuple
+
+
+def _parse_sock(sock_path: str) -> Tuple[socket.AddressFamily, Tuple[str, int] | str]:
+    if sock_path.startswith("tcp://"):
+        host_port = sock_path[6:]
+        host, port_str = host_port.split(":", 1)
+        return socket.AF_INET, (host, int(port_str))
+    return socket.AF_UNIX, sock_path
 
 
 def start_ipc_server(
@@ -13,7 +21,7 @@ def start_ipc_server(
     secret: Optional[str] = None,
     max_size: int = 65536,
 ) -> None:
-    """Start a simple UNIX socket server.
+    """Start a simple IPC server using UNIX or TCP sockets.
 
     Parameters
     ----------
@@ -24,11 +32,14 @@ def start_ipc_server(
     once: bool
         If True, handle a single request and exit.
     """
-    if os.path.exists(sock_path):
-        os.remove(sock_path)
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
-        server.bind(sock_path)
-        os.chmod(sock_path, 0o600)
+    family, addr = _parse_sock(sock_path)
+    if family == socket.AF_UNIX:
+        if os.path.exists(addr):
+            os.remove(addr)
+    with socket.socket(family, socket.SOCK_STREAM) as server:
+        server.bind(addr)
+        if family == socket.AF_UNIX:
+            os.chmod(addr, 0o600)
         server.listen(1)
         while True:
             conn, _ = server.accept()

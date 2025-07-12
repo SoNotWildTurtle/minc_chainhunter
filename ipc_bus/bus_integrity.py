@@ -27,6 +27,8 @@ def is_alias_approved(alias: str, path: str = ALIAS_FILE) -> bool:
 
 def check_socket_permissions(sock_path: str) -> bool:
     """Ensure socket exists and is not world writable."""
+    if sock_path.startswith("tcp://"):
+        return True
     try:
         st = os.stat(sock_path)
     except FileNotFoundError:

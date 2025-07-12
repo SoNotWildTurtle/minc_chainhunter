@@ -21,6 +21,9 @@ Install the following Python packages:
 pip install numpy scikit-learn cryptography fpdf
 ```
 Run `python3 scripts/install_requirements.py` to install these packages and any requirements from cloned scanners.
+## Operating systems
+ChainHunter runs on Linux systems such as Kali and on Windows via WSL or PowerShell. Most modules rely on bash, so Windows users should run in WSL or Git Bash for full compatibility.
+
 
 
 
@@ -93,6 +96,7 @@ required GitHub projects locally:
 ```bash
 ./scripts/install_scanner_repos.sh
 ```
+For Windows systems use `scripts/install_scanner_repos.ps1` in PowerShell. Running under WSL or Git Bash is recommended. Kali Linux can use the bash script as-is.
 Run `python3 scripts/install_requirements.py` to install Python dependencies.
 
 This script clones the latest versions of several scanners under

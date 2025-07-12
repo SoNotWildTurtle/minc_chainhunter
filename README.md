@@ -167,6 +167,7 @@ request and response data from stored results into the specified directory.
 You can launch the analysis database server with `scripts/setup_ipc_bus.sh`,
 which starts the IPC service at the path specified by the `MINC_DB_SOCKET`
 environment variable. On Windows, run
+`scripts/setup_ipc_bus.ps1` or
 `python -m analysis_db.db_init --socket tcp://127.0.0.1:8765` to start the
 server using a TCP socket. The server now drops privileges to the `nobody` user
 by default when started through the sandbox scripts, ensuring results are
@@ -528,6 +529,14 @@ Run `scripts/install_service.sh` to install a systemd user service that keeps Ch
 ```
 
 The service restarts automatically and the timer checks every hour to ensure it remains active.
+
+Windows users can install an equivalent scheduled task with `scripts/install_service.ps1`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/install_service.ps1
+```
+
+This creates a virtual environment and registers two tasks—one at logon and one hourly—to keep ChainHunter running in a console window.
 
 ## Plugin manager
 

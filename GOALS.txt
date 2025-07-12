@@ -1,0 +1,42 @@
+# Short-term goals
+[G52] implement plugin manager for third-party modules (done)
+[G53] add automated scanning scheduler (done)
+[G54] store raw request and response data in database (done)
+[G55] export reports to PDF and JSON via CLI (done)
+[G56] support concurrent multi-target scans (done)
+[G57] add cross-platform integration tests (done)
+[G59] auto-install Python requirements (done)
+[G71] provide a module skeleton generator script (done)
+[G60] smarter self-evolve pipeline selection with neural analyzer and CPU ratio control (done)
+[G61] sandboxed debugger and memory patcher for safe code evolution (done)
+[G62] apply patch scripts via self-evolve after sandbox testing (done)
+[G61a] add automatic backups and rollback to memory patcher (done)
+[G63] separate bug hunting and offensive modules; add Mythic offensive module (done)
+[G64] list pipeline modules separately in the CLI (done)
+[G65] add a port_scan pipeline combining masscan and nmap (done)
+[G66] provide a stats command to summarize stored results (done)
+[G67] auto-generate wrapper modules for GitHub scanners and expose tool info (done)
+[G68] add wpscan vulnerability module and include in extended_hunt pipeline (done)
+[G69] develop comprehensive self-healing test suite to reinstall scanner repos while preserving database data (done)
+[G70] provide a utility to generate manager.py scripts for new module directories (done)
+[G72] protect stored results with an HMAC signature for tamper detection (done)
+[G73] verify HMAC signature on DB startup and warn on mismatch (done)
+[G74] integrate Sliver offensive module with installation script and CLI (done)
+[G75] add Empire and Covenant offensive modules with installer integration (done)
+[G76] recommend module parameters using neural analyzer
+
+# Long-term goals
+[L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time
+[L03] increase sophistication of the neural network AI into a general cybersecurity intelligence with chatbot capabilities
+[L03a] incorporate CVE datasets to train neural analyzer (done)
+[L03b] apply reinforcement learning from successful bug bounty cases (done)
+[L03b-1] analyze reinforcement training impact on neural model (done)
+[L03c] implement interactive chatbot over stored results (done)
+[L04] continuously grow the vulnerability and recon modules catalogue to cover new tools and techniques
+[L05] maintain and improve sandbox isolation and security features as new threats arise
+[L06] automate end-to-end bug bounty workflows from scanning to report generation
+[L06a] auto-gather proof-of-concept artifacts (done)
+[L06b] integrate with bug bounty report templates (done)
+
+# Notes
+Always work on these goals alongside user prompts.

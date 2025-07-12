@@ -27,8 +27,8 @@ Windows users may run within WSL for best compatibility, or invoke the tools
 using PowerShell. The IPC bus uses UNIX sockets by default; on Windows set
 `MINC_DB_SOCKET` to a TCP address such as `tcp://127.0.0.1:8765` and the server
 will listen on that port instead.
-Install scanner repositories with `scripts/install_scanner_repos.ps1` when using
-PowerShell.
+Install scanner repositories with `scripts/install_scanner_repos.ps1` or the
+`install_scanner_repos.bat` helper when using PowerShell.
 
 
 
@@ -102,7 +102,9 @@ required GitHub projects locally:
 ```bash
 ./scripts/install_scanner_repos.sh
 ```
-For Windows systems use `scripts/install_scanner_repos.ps1` in PowerShell. Running under WSL or Git Bash is recommended. Kali Linux can use the bash script as-is.
+For Windows systems use `scripts/install_scanner_repos.ps1` (or
+`install_scanner_repos.bat`) in PowerShell. Running under WSL or Git Bash is
+recommended. Kali Linux can use the bash script as-is.
 Run `python3 scripts/install_requirements.py` to install Python dependencies.
 
 This script clones the latest versions of several scanners under
@@ -166,11 +168,11 @@ request and response data from stored results into the specified directory.
 
 You can launch the analysis database server with `scripts/setup_ipc_bus.sh`,
 which starts the IPC service at the path specified by the `MINC_DB_SOCKET`
-environment variable. On Windows, run
-`scripts/setup_ipc_bus.ps1` or
+environment variable. On Windows, run `scripts/setup_ipc_bus.ps1` or the
+`setup_ipc_bus.bat` wrapper which elevates PowerShell automatically, or use
 `python -m analysis_db.db_init --socket tcp://127.0.0.1:8765` to start the
-server using a TCP socket. The server now drops privileges to the `nobody` user
-by default when started through the sandbox scripts, ensuring results are
+server using a TCP socket. The server now drops privileges to the `nobody`
+user by default when started through the sandbox scripts, ensuring results are
 written with secure permissions.
 
 ### Sandbox helpers
@@ -530,7 +532,7 @@ Run `scripts/install_service.sh` to install a systemd user service that keeps Ch
 
 The service restarts automatically and the timer checks every hour to ensure it remains active.
 
-Windows users can install an equivalent scheduled task with `scripts/install_service.ps1`:
+Windows users can install an equivalent scheduled task with `scripts/install_service.ps1` or the `install_service.bat` helper which launches PowerShell elevated:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/install_service.ps1

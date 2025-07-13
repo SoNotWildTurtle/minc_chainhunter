@@ -33,6 +33,8 @@ Windows users can launch ChainHunter using `chainhunter.bat` which sets up a
 virtual environment, starts the IPC server, and opens the interactive CLI.
 The batch script now passes the interpreter path so the database uses the same
 environment.
+On Linux systems, run `./chainhunter.sh` from the repository root to
+create a virtual environment, start the IPC server, and launch the interactive CLI automatically.
 
 
 
@@ -180,8 +182,7 @@ environment variable. On Windows, run `scripts/setup_ipc_bus.ps1` or the
 server using a TCP socket. The server now drops privileges to the `nobody`
 user by default when started through the sandbox scripts, ensuring results are
 written with secure permissions.
-`setup_ipc_bus.ps1` accepts a `-Python` argument so the Windows launcher can start the server using the virtual environment's interpreter.
-
+`setup_ipc_bus.ps1` and `setup_ipc_bus.sh` accept a `-Python` argument so launchers can start the server using the virtual environment's interpreter.
 ### Sandbox helpers
 
 The `sandbox/db_env/run_db.sh` script launches the database in an isolated

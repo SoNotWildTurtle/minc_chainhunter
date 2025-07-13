@@ -27,7 +27,8 @@
 [G77] document Windows and Kali support with PowerShell repo installer (done)
 [G78] provide automated Windows service and DB setup scripts (done)
 [G79] add Windows batch wrappers for PowerShell scripts (done)
-[G80] provide a single Windows entry point script to launch ChainHunter
+[G80] provide a single Windows entry point script to launch ChainHunter (done)
+[G81] provide a single Linux entry point script to launch ChainHunter
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

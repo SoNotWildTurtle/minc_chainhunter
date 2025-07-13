@@ -1,0 +1,14 @@
+__pycache__/
+*.log
+github_scanners/*/src/
+github_scanners/*/venv/
+github_scanners/gitleaks/gitleaks
+tests/__pycache__/
+analysis_db/__pycache__/
+recon_modules/__pycache__/
+vuln_modules/__pycache__/
+pipelines/__pycache__/
+cli/__pycache__/
+analysis_db/model.pkl
+analysis_db/module_model.pkl
+venv/

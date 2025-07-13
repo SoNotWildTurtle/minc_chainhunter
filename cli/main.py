@@ -21,7 +21,16 @@ import importlib
 import glob
 import argparse
 import logging
-from colorama import init, Fore, Style
+try:
+    from colorama import init, Fore, Style
+except Exception:  # pragma: no cover - optional dependency
+    print("[!] Missing 'colorama'. Run install_requirements.py or install from requirements.txt")
+    init = lambda *args, **kwargs: None
+    class Dummy:
+        RESET_ALL = ''
+        GREEN = MAGENTA = ''
+        BRIGHT = ''
+    Fore = Style = Dummy()
 import json
 import subprocess
 from typing import Dict, List, Optional, Any

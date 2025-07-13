@@ -29,6 +29,7 @@
 [G79] add Windows batch wrappers for PowerShell scripts (done)
 [G80] provide a single Windows entry point script to launch ChainHunter (done)
 [G81] provide a single Linux entry point script to launch ChainHunter (done)
+[G82] gracefully handle missing dependencies in CLI
 
 # Long-term goals
 [L02] develop comprehensive self-healing tests to reinstall scanners and validate DB integrity over time

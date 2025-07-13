@@ -7,4 +7,4 @@ def test_windows_batch_scripts():
         assert path.exists()
         text = path.read_text()
         assert 'powershell.exe' in text
-        assert 'Start-Process powershell.exe -Verb runas' in text
+        assert 'Start-Process -FilePath powershell.exe -Verb RunAs' in text

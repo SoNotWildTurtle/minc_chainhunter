@@ -10,6 +10,6 @@ if (-not (Test-Path "$Venv\Scripts\python.exe")) {
     & (Join-Path $ScriptDir 'scripts\install_scanner_repos.ps1')
 }
 # Start the IPC server elevated if not running
-$bus = Start-Process powershell -Verb RunAs -PassThru -ArgumentList "-ExecutionPolicy Bypass -File `"$ScriptDir\scripts\setup_ipc_bus.ps1`" -Socket $Socket"
+$bus = Start-Process -FilePath powershell -Verb RunAs -PassThru -ArgumentList "-ExecutionPolicy Bypass -File `"$ScriptDir\scripts\setup_ipc_bus.ps1`" -Socket $Socket"
 # Launch the CLI
 & "$Venv\Scripts\python.exe" (Join-Path $ScriptDir 'cli\main.py') @Args

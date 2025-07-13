@@ -58,6 +58,18 @@ def run_module(name: str, args: List[str]) -> None:
         print(f'Module {name} has no main()')
 
 
+def show_usage(name: str) -> None:
+    sys.path.insert(0, MODULE_DIR)
+    mod = importlib.import_module(name)
+    if hasattr(mod, 'main'):
+        try:
+            mod.main(['-h'])
+        except SystemExit:
+            pass
+    else:
+        print('No usage info available')
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description='Offensive module manager')
     sub = parser.add_subparsers(dest='cmd')
@@ -79,6 +91,9 @@ def main() -> None:
     p = sub.add_parser('recommend', help='Recommend parameters for a module')
     p.add_argument('module')
     p.add_argument('-n', type=int, default=50, metavar='N', help='Analyze last N results')
+
+    h = sub.add_parser('help', help='Show module usage')
+    h.add_argument('module')
 
     args = parser.parse_args()
 
@@ -117,6 +132,11 @@ def main() -> None:
                 print('Failed to get recommendations')
         except Exception as exc:
             print(f'Error: {exc}')
+    elif args.cmd == 'help':
+        if args.module not in list_modules():
+            print('Unknown module')
+            return
+        show_usage(args.module)
 
 
 if __name__ == '__main__':

@@ -75,6 +75,9 @@ def main():
     rec_p.add_argument('tool')
     rec_p.add_argument('-n', type=int, default=50, metavar='N', help='Analyze last N results')
 
+    help_p = sub.add_parser('help', help='Show tool usage')
+    help_p.add_argument('tool')
+
     args = parser.parse_args()
 
     if args.cmd == 'list' or args.cmd is None:
@@ -107,6 +110,11 @@ def main():
                 print('Failed to get recommendations')
         except Exception as exc:
             print(f'Error: {exc}')
+    elif args.cmd == 'help':
+        if args.tool not in list_tools():
+            print('Unknown tool')
+            return
+        show_info(args.tool)
 
 
 if __name__ == '__main__':

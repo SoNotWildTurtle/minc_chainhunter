@@ -74,3 +74,11 @@ def test_manager_funcs_and_call(tmp_path):
         '-n', '1'
     ], capture_output=True, text=True, cwd=repo_root)
     assert rec_proc.returncode == 0
+
+    help_proc = subprocess.run([
+        sys.executable,
+        'recon_modules/manager.py',
+        'help',
+        'ping_sweep'
+    ], capture_output=True, text=True, cwd=repo_root)
+    assert 'usage' in help_proc.stdout.lower()

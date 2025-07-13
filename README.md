@@ -31,6 +31,8 @@ Install scanner repositories with `scripts/install_scanner_repos.ps1` or the
 `install_scanner_repos.bat` helper when using PowerShell. After installing,
 Windows users can launch ChainHunter using `chainhunter.bat` which sets up a
 virtual environment, starts the IPC server, and opens the interactive CLI.
+The batch script now passes the interpreter path so the database uses the same
+environment.
 
 
 
@@ -43,11 +45,13 @@ python3 cli/main.py list           # list available modules
 python3 cli/main.py list -t pipeline  # list available pipelines
 python3 cli/main.py run <module> [args]
 python3 cli/main.py run <module> --targets host1 host2  # run concurrently
+python3 cli/main.py usage <module>   # show argument options for a module
 ```
 
 Use `--workers` to control the number of concurrent threads when running multiple targets.
 
 The interactive mode now displays a colorful banner titled **ChainHunter Bug Hunting Utility** when run in a real terminal. Pipeline steps announce themselves and pause for confirmation when the session is interactive.
+When you select a module from the menu its help and usage information are shown before prompting for parameters, so you know exactly what options are available.
 
 Example modules include:
 
@@ -176,6 +180,7 @@ environment variable. On Windows, run `scripts/setup_ipc_bus.ps1` or the
 server using a TCP socket. The server now drops privileges to the `nobody`
 user by default when started through the sandbox scripts, ensuring results are
 written with secure permissions.
+`setup_ipc_bus.ps1` accepts a `-Python` argument so the Windows launcher can start the server using the virtual environment's interpreter.
 
 ### Sandbox helpers
 

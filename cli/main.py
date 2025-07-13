@@ -108,6 +108,9 @@ def setup_argparse() -> argparse.ArgumentParser:
     info_parser = subparsers.add_parser('info', help='Show module information')
     info_parser.add_argument('module', help='Name of the module to get info about')
 
+    usage_parser = subparsers.add_parser('usage', help='Show module usage')
+    usage_parser.add_argument('module', help='Module name')
+
     # Update command
     update_parser = subparsers.add_parser('update', help='Update MINC ChainHunter')
     update_parser.add_argument(
@@ -273,6 +276,20 @@ def get_module_info(name: str) -> Dict[str, Any]:
         logger.error(f"Error getting info for module {name}: {str(e)}")
         raise
 
+def show_module_usage(name: str) -> None:
+    """Display usage information for a module if supported."""
+    try:
+        mod = load_module(name)
+        if hasattr(mod, 'main'):
+            try:
+                mod.main(['-h'])
+            except SystemExit:
+                pass
+        else:
+            print(f'No usage info available for {name}')
+    except Exception as exc:
+        print(f'Error showing usage for {name}: {exc}')
+
 def run_module(name: str, args: List[str]) -> bool:
     """Run a module with the given arguments."""
     try:
@@ -434,7 +451,11 @@ def interactive_mode() -> None:
                 module_list = sorted(MODULES)
                 if 0 <= idx < len(module_list):
                     module_name = module_list[idx]
+                    info = get_module_info(module_name)
                     print(f"\n[*] Running module: {module_name}")
+                    if info.get('doc'):
+                        print(info['doc'])
+                    show_module_usage(module_name)
                     print("    Enter module arguments (if any) or press Enter to continue:")
                     args = input("    >>> ").strip().split()
                     run_module(module_name, args)
@@ -573,6 +594,10 @@ def main() -> int:
             except Exception as e:
                 logger.error(f"Error: {str(e)}")
                 return 1
+
+        elif args.command == 'usage':
+            show_module_usage(args.module)
+            return 0
 
         elif args.command == 'update':
             success = update_minc(args.force)

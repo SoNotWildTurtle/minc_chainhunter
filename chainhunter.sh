@@ -12,6 +12,6 @@ fi
 SOCKET="${MINC_DB_SOCKET:-/tmp/minc_db.sock}"
 bash "$SCRIPT_DIR/scripts/setup_ipc_bus.sh" -Socket "$SOCKET" -Python "$PY" &
 BUS_PID=$!
+trap "kill $BUS_PID" EXIT
 sleep 1
 "$PY" "$SCRIPT_DIR/cli/main.py" "$@"
-kill $BUS_PID

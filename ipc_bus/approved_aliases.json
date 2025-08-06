@@ -1,0 +1,21 @@
+{
+  "aliases": [
+    "scan",
+    "update",
+    "info",
+    "report",
+    "results",
+    "stats",
+    "search",
+    "purge",
+    "chat",
+    "plan",
+    "train",
+    "modules",
+    "params",
+    "train_cve",
+    "train_success",
+    "operator",
+    "explore"
+  ]
+}

@@ -1,0 +1,6 @@
+# Setup Verification Checklist
+[SV01] confirm Python requirements installation (done)
+[SV02] verify scanner repositories cloned (pending)
+[SV03] run self-test to validate environment (pending)
+[SV04] ensure IPC bus accepts approved aliases (pending)
+[SV05] confirm database logs and tags scan results (pending)
